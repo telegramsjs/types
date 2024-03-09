@@ -1,0 +1,32 @@
+{
+  "name": "@telegram.ts/types",
+  "version": "1.7.0",
+  "description": "Comprehensive Type Declarations for Telegram Bot API with telegramsjs",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "keywords": [
+    "telegramsjs",
+    "telegram",
+    "bot",
+    "api",
+    "types"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/telegramsjs/types/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/telegramsjs/types.git"
+  },
+  "devDependencies": {
+    "@types/node": "^18.16.1"
+  },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "package.json",
+    "src/*.d.ts",
+    "src/index.js"
+  ]
+}
