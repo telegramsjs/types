@@ -1,11 +1,13 @@
 import type { ChosenInlineResult, InlineQuery } from "./inlineTypes";
 import type {
+  User,
   Chat,
   ChatJoinRequest,
   ChatMemberUpdated,
   ChatBoostRemoved,
   ChatBoostUpdated,
-  User,
+  BusinessConnection,
+  BusinessMessagesDeleted,
 } from "./manageTypes";
 import type { CallbackQuery } from "./markupTypes";
 import type {
@@ -21,6 +23,11 @@ import type { PreCheckoutQuery, ShippingQuery } from "./invoiceTypes";
  * Namespace used internally to define more accurate message update types.
  */
 export declare namespace Update {
+  /** Internal type holding properties that message updates in private chats share. */
+  interface Private {
+    chat: Chat.PrivateChat;
+  }
+
   /**
    * Internal type holding properties that message updates in channels share.
    */
@@ -78,6 +85,18 @@ export interface Update {
    * New version of a channel post known to the bot that has been edited.
    */
   edited_channel_post?: Message & Update.Edited & Update.Channel;
+
+  /** The bot was connected to or disconnected from a business account, or a user edited an existing connection with the bot */
+  business_connection?: BusinessConnection;
+
+  /** New non-service message from a connected business account */
+  business_message?: Message & Update.Private;
+
+  /** New version of a message from a connected business account */
+  edited_business_message?: Message & Update.Edited & Update.Private;
+
+  /** Messages were deleted from a connected business account */
+  deleted_business_messages?: BusinessMessagesDeleted;
 
   /** A reaction to a message was changed by a user. The bot must be an administrator in the chat and must explicitly specify "message_reaction" in the list of allowed_updates to receive these updates. The update isn't received for reactions set by bots. */
   message_reaction?: MessageReactionUpdated;

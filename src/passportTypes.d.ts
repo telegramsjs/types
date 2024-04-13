@@ -35,21 +35,21 @@ export interface EncryptedPassportElement {
     | "temporary_registration"
     | "phone_number"
     | "email";
-  /** Base64-encoded encrypted Telegram Passport element data provided by the user. This data is available for types "personal_details", "passport", "driver_license", "identity_card", "internal_passport", and "address". It can be decrypted and verified using the accompanying EncryptedCredentials. */
+  /** Base64-encoded encrypted Telegram Passport element data provided by the user; available only for “personal_details”, “passport”, “driver_license”, “identity_card”, “internal_passport” and “address” types. Can be decrypted and verified using the accompanying EncryptedCredentials. */
   data?: string;
-  /** User's verified phone number, available only for type "phone_number". */
+  /** User's verified phone number; available only for type "phone_number". */
   phone_number?: string;
-  /** User's verified email address, available only for type "email". */
+  /** User's verified email address; available only for type "email". */
   email?: string;
-  /** Array of encrypted files with documents provided by the user. This array is available for types "utility_bill", "bank_statement", "rental_agreement", "passport_registration", and "temporary_registration". The files can be decrypted and verified using the accompanying EncryptedCredentials. */
+  /** Array of encrypted files with documents provided by the user; This array is available only for types "utility_bill", "bank_statement", "rental_agreement", "passport_registration", and "temporary_registration". The files can be decrypted and verified using the accompanying EncryptedCredentials. */
   files?: PassportFile[];
-  /** Encrypted file with the front side of the document, provided by the user. This file is available for types "passport", "driver_license", "identity_card", and "internal_passport". It can be decrypted and verified using the accompanying EncryptedCredentials. */
+  /** Encrypted file with the front side of the document, provided by the user; This file is available only for types "passport", "driver_license", "identity_card", and "internal_passport". It can be decrypted and verified using the accompanying EncryptedCredentials. */
   front_side?: PassportFile;
-  /** Encrypted file with the reverse side of the document, provided by the user. This file is available for types "driver_license" and "identity_card". It can be decrypted and verified using the accompanying EncryptedCredentials. */
+  /** Encrypted file with the reverse side of the document, provided by the user; This file is available only for types "driver_license" and "identity_card". It can be decrypted and verified using the accompanying EncryptedCredentials. */
   reverse_side?: PassportFile;
-  /** Encrypted file with the selfie of the user holding a document, provided by the user. This file is available for types "passport", "driver_license", "identity_card", and "internal_passport". It can be decrypted and verified using the accompanying EncryptedCredentials. */
+  /** Encrypted file with the selfie of the user holding a document, provided by the user. This file is available if requested for types "passport", "driver_license", "identity_card", and "internal_passport". It can be decrypted and verified using the accompanying EncryptedCredentials. */
   selfie?: PassportFile;
-  /** Array of encrypted files with translated versions of documents provided by the user. This array is available for types "passport", "driver_license", "identity_card", "internal_passport", "utility_bill", "bank_statement", "rental_agreement", "passport_registration", and "temporary_registration". The
+  /** Array of encrypted files with translated versions of documents provided by the user; This array is available only for types "passport", "driver_license", "identity_card", "internal_passport", "utility_bill", "bank_statement", "rental_agreement", "passport_registration", and "temporary_registration". The
 
   files can be decrypted and verified using the accompanying EncryptedCredentials. */
   translation?: PassportFile[];

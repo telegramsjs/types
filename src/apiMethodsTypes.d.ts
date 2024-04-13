@@ -5,6 +5,7 @@ import type {
 } from "./inlineTypes.ts";
 import type {
   BotCommand,
+  BusinessConnection,
   ChatAdministratorRights,
   ChatFromGetChat,
   ChatInviteLink,
@@ -120,6 +121,8 @@ export type ApiMethods = {
 
   /** Use this method to send text messages. On success, the sent Message is returned. */
   sendMessage(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    business_connection_id?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
@@ -138,7 +141,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -172,7 +175,7 @@ export type ApiMethods = {
     message_thread_id?: number;
     /** Unique identifier for the chat where the original messages were sent (or channel username in the format @channelusername) */
     from_chat_id: number | string;
-    /** Identifiers of 1-100 messages in the chat from_chat_id to forward. The identifiers must be specified in a strictly increasing order. */
+    /** A list of 1-100 identifiers of messages in the chat from_chat_id to forward. The identifiers must be specified in a strictly increasing order. */
     message_ids: number[];
     /** Sends the messages silently. Users will receive a notification with no sound. */
     disable_notification?: boolean;
@@ -202,7 +205,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -220,7 +223,7 @@ export type ApiMethods = {
     message_thread_id?: number;
     /** Unique identifier for the chat where the original messages were sent (or channel username in the format @channelusername) */
     from_chat_id: number | string;
-    /** Identifiers of 1-100 messages in the chat from_chat_id to copy. The identifiers must be specified in a strictly increasing order. */
+    /** A list of 1-100 identifiers of messages in the chat from_chat_id to copy. The identifiers must be specified in a strictly increasing order. */
     message_ids: number[];
     /** Sends the messages silently. Users will receive a notification with no sound. */
     disable_notification?: boolean;
@@ -232,6 +235,8 @@ export type ApiMethods = {
 
   /** Use this method to send photos. On success, the sent Message is returned. */
   sendPhoto(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    business_connection_id?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
@@ -252,7 +257,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -266,6 +271,8 @@ export type ApiMethods = {
 
   For sending voice messages, use the sendVoice method instead. */
   sendAudio(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    business_connection_id?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
@@ -292,7 +299,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -304,6 +311,8 @@ export type ApiMethods = {
 
   /** Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future. */
   sendDocument(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    business_connection_id?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
@@ -326,7 +335,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -338,6 +347,8 @@ export type ApiMethods = {
 
   /** Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future. */
   sendVideo(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    business_connection_id?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
@@ -368,7 +379,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -380,6 +391,8 @@ export type ApiMethods = {
 
   /** Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future. */
   sendAnimation(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    business_connection_id?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
@@ -408,7 +421,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -420,6 +433,8 @@ export type ApiMethods = {
 
   /** Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future. */
   sendVoice(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    business_connection_id?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
@@ -440,7 +455,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -453,6 +468,8 @@ export type ApiMethods = {
   /** Use this method to send video messages. On success, the sent Message is returned.
   As of v.4.0, Telegram clients support rounded square MPEG4 videos of up to 1 minute long. */
   sendVideoNote(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    business_connection_id?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
@@ -471,7 +488,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -483,6 +500,8 @@ export type ApiMethods = {
 
   /** Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Messages that were sent is returned. */
   sendMediaGroup(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    business_connection_id?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
     /** An array describing messages to be sent, must include 2-10 items */
@@ -508,6 +527,8 @@ export type ApiMethods = {
 
   /** Use this method to send point on the map. On success, the sent Message is returned. */
   sendLocation(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    business_connection_id?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
@@ -530,7 +551,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -576,6 +597,8 @@ export type ApiMethods = {
 
   /** Use this method to send information about a venue. On success, the sent Message is returned. */
   sendVenue(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    business_connection_id?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
@@ -602,7 +625,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -614,6 +637,8 @@ export type ApiMethods = {
 
   /** Use this method to send phone contacts. On success, the sent Message is returned. */
   sendContact(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    business_connection_id?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
@@ -632,7 +657,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove keyboard or to force a reply from the user. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -644,6 +669,8 @@ export type ApiMethods = {
 
   /** Use this method to send a native poll. On success, the sent Message is returned. */
   sendPoll(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    business_connection_id?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
@@ -678,7 +705,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -690,6 +717,8 @@ export type ApiMethods = {
 
   /** Use this method to send an animated emoji that will display a random value. On success, the sent Message is returned. */
   sendDice(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    business_connection_id?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
@@ -702,7 +731,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -718,6 +747,8 @@ export type ApiMethods = {
 
   We only recommend using this method when a response from the bot will take a noticeable amount of time to arrive. */
   sendChatAction(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    business_connection_id?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
     /** Type of action to broadcast. Choose one, depending on what the user is about to receive: typing for text messages, upload_photo for photos, record_video or upload_video for videos, record_voice or upload_voice for voice notes, upload_document for general files, choose_sticker for stickers, find_location for location data, record_video_note or upload_video_note for video notes. */
@@ -733,7 +764,7 @@ export type ApiMethods = {
       | "find_location"
       | "record_video_note"
       | "upload_video_note";
-    /** Unique identifier for the target message thread; supergroups only */
+    /** Unique identifier for the target message thread; for supergroups only */
     message_thread_id?: number;
   }): true;
 
@@ -743,7 +774,7 @@ export type ApiMethods = {
     chat_id: number | string;
     /** Identifier of the target message */
     message_id: number;
-    /** New list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators. */
+    /** A list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators. */
     reaction?: ReactionType[];
     /** Pass True to set the reaction with a big animation */
     is_big?: boolean;
@@ -829,19 +860,19 @@ export type ApiMethods = {
     can_change_info?: boolean;
     /** Pass True if the administrator can invite new users to the chat */
     can_invite_users?: boolean;
-    /** Pass True if the administrator can post messages in the channel, or access channel statistics; channels only */
-    can_post_messages?: boolean;
-    /** Pass True if the administrator can edit messages of other users and can pin messages; channels only */
-    can_edit_messages?: boolean;
-    /** Pass True if the administrator can pin messages, supergroups only */
-    can_pin_messages?: boolean;
-    /** Pass True if the administrator can post stories to the chat */
+    /** True if the administrator can post stories to the chat */
     can_post_stories?: boolean;
-    /** Pass True if the administrator can edit stories posted by other users */
+    /** True if the administrator can edit stories posted by other users */
     can_edit_stories?: boolean;
-    /** Pass True if the administrator can delete stories posted by other users */
+    /** True if the administrator can delete stories posted by other users */
     can_delete_stories?: boolean;
-    /** Pass True if the user is allowed to create, rename, close, and reopen forum topics, supergroups only */
+    /** True if the administrator can post messages in the channel, or access channel statistics; for channels only */
+    can_post_messages?: boolean;
+    /** True if the administrator can edit messages of other users and can pin messages; for channels only */
+    can_edit_messages?: boolean;
+    /** True if the administrator can pin messages; for supergroups only */
+    can_pin_messages?: boolean;
+    /** True if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only */
     can_manage_topics?: boolean;
   }): true;
 
@@ -1175,6 +1206,12 @@ export type ApiMethods = {
     user_id: number;
   }): UserChatBoosts;
 
+  /** Use this method to get information about the connection of the bot with a business account. Returns a BusinessConnection object on success. */
+  getBusinessConnection(args: {
+    /** Unique identifier of the business connection */
+    business_connection_id: string;
+  }): BusinessConnection;
+
   /** Use this method to change the list of the bot's commands. See https://core.telegram.org/bots#commands for more details about bot commands. Returns True on success. */
   setMyCommands(args: {
     /** A list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified. */
@@ -1366,17 +1403,19 @@ export type ApiMethods = {
   deleteMessages(args: {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
-    /** Identifiers of 1-100 messages to delete. See deleteMessage for limitations on which messages can be deleted */
+    /** A list of 1-100 identifiers of messages to delete. See deleteMessage for limitations on which messages can be deleted */
     message_ids: number[];
   }): true;
 
   /** Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned. */
   sendSticker(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    business_connection_id?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
-    /** Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload a new .WEBP or .TGS sticker using multipart/form-data. Video stickers can only be sent by a file_id. Animated stickers can't be sent via an HTTP URL. */
+    /** Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload a new .WEBP, .TGS, or .WEBM sticker using multipart/form-data. Video and animated stickers can't be sent via an HTTP URL. */
     sticker: Buffer | ReadStream | string | string;
     /** Emoji associated with the sticker; only for just uploaded stickers */
     emoji?: string;
@@ -1386,7 +1425,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -1408,7 +1447,7 @@ export type ApiMethods = {
     custom_emoji_ids: string[];
   }): Sticker[];
 
-  /** Use this method to upload a file with a sticker for later use in the createNewStickerSet and addStickerToSet methods (the file can be used multiple times). Returns the uploaded File on success. */
+  /** Use this method to upload a file with a sticker for later use in the createNewStickerSet, addStickerToSet, or replaceStickerInSet methods (the file can be used multiple times). Returns the uploaded File on success. */
   uploadStickerFile(args: {
     /** User identifier of sticker file owner */
     user_id: number;
@@ -1428,21 +1467,31 @@ export type ApiMethods = {
     title: string;
     /** A list of 1-50 initial stickers to be added to the sticker set */
     stickers: InputSticker[];
-    /** Format of the sticker, must be one of “static”, “animated”, “video” */
-    sticker_format: "static" | "animated" | "video";
     /** Type of stickers in the set, pass “regular”, “mask”, or “custom_emoji”. By default, a regular sticker set is created. */
     sticker_type?: "regular" | "mask" | "custom_emoji";
     /** Pass True if stickers in the sticker set must be repainted to the color of text when used in messages, the accent color if used as emoji status, white on chat photos, or another appropriate color based on context; for custom emoji sticker sets only */
     needs_repainting?: boolean;
   }): true;
 
-  /** Use this method to add a new sticker to a set created by the bot. The format of the added sticker must match the format of the other stickers in the set. Emoji sticker sets can have up to 200 stickers. Animated and video sticker sets can have up to 50 stickers. Static sticker sets can have up to 120 stickers. Returns True on success. */
+  /** Use this method to add a new sticker to a set created by the bot. Emoji sticker sets can have up to 200 stickers. Other sticker sets can have up to 120 stickers. Returns True on success. */
   addStickerToSet(args: {
     /** User identifier of sticker set owner */
     user_id: number;
     /** Sticker set name */
     name: string;
     /** An object with information about the added sticker. If exactly the same sticker had already been added to the set, then the set isn't changed. */
+    sticker: InputSticker;
+  }): true;
+
+  /** Use this method to replace an existing sticker in a sticker set with a new one. The method is equivalent to calling deleteStickerFromSet, then addStickerToSet, then setStickerPositionInSet. Returns True on success. */
+  replaceStickerInSet(args: {
+    /** User identifier of the sticker set owner */
+    user_id: number;
+    /** Sticker set name */
+    name: string;
+    /** File identifier of the replaced sticker */
+    old_sticker: string;
+    /** An object with information about the added sticker. If exactly the same sticker had already been added to the set, then the set remains unchanged.:x */
     sticker: InputSticker;
   }): true;
 
@@ -1506,6 +1555,8 @@ export type ApiMethods = {
     user_id: number;
     /** A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animated-sticker-requirements for animated sticker technical requirements), or a WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-sticker-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files ». Animated and video sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail. */
     thumbnail?: Buffer | ReadStream | string | string;
+    /** Format of the thumbnail, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, or “video” for a WEBM video */
+    format: "static" | "animated" | "video";
   }): true;
 
   /** Use this method to set the thumbnail of a custom emoji sticker set. Returns True on success. */
@@ -1681,6 +1732,8 @@ export type ApiMethods = {
 
   /** Use this method to send a game. On success, the sent Message is returned. */
   sendGame(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    business_connection_id?: string;
     /** Unique identifier for the target chat */
     chat_id: number;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
@@ -1693,7 +1746,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** An object for an inline keyboard. If empty, one 'Play game_title' button will be shown. If not empty, the first button must launch the game. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
     reply_markup?: InlineKeyboardMarkup;
     /** @deprecated Use `reply_parameters` instead. */
     reply_to_message_id?: number;
@@ -1734,6 +1787,8 @@ export type ApiMethods = {
 
 /** This object describes a sticker to be added to a sticker set. */
 export interface InputSticker {
+  /** Format of the thumbnail, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, or “video” for a WEBM video */
+  format: "static" | "animated" | "video";
   /** The added sticker. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. Animated and video stickers can't be uploaded via HTTP URL. */
   sticker: Buffer | ReadStream | string;
   /** List of 1-20 emoji associated with the sticker */
