@@ -7,9 +7,9 @@ import type {
   BotCommand,
   BusinessConnection,
   ChatAdministratorRights,
-  ChatFromGetChat,
   ChatInviteLink,
   ChatMember,
+  ChatFullInfo,
   ChatMemberAdministrator,
   ChatMemberOwner,
   ChatPermissions,
@@ -28,6 +28,7 @@ import type {
 import type {
   File,
   GameHighScore,
+  InputPollOption,
   LinkPreviewOptions,
   MaskPosition,
   Message,
@@ -141,7 +142,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -205,7 +206,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -257,7 +258,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -267,9 +268,7 @@ export type ApiMethods = {
     reply_to_message_id?: number;
   }): Message.PhotoMessage;
 
-  /** Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
-
-  For sending voice messages, use the sendVoice method instead. */
+  /** Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future. */
   sendAudio(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     business_connection_id?: string;
@@ -299,7 +298,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -335,7 +334,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -379,7 +378,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -421,7 +420,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -455,7 +454,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -488,7 +487,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -539,7 +538,7 @@ export type ApiMethods = {
     longitude: number;
     /** The radius of uncertainty for the location, measured in meters; 0-1500 */
     horizontal_accuracy?: number;
-    /** Period in seconds for which the location will be updated (see Live Locations, should be between 60 and 86400. */
+    /** Period in seconds during which the location will be updated (see Live Locations, should be between 60 and 86400, or 0x7FFFFFFF for live locations that can be edited indefinitely. */
     live_period?: number;
     /** The direction in which user is moving, in degrees; 1-360. For active live locations only. */
     heading?: number;
@@ -551,7 +550,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -573,6 +572,8 @@ export type ApiMethods = {
     latitude: number;
     /** Longitude of new location */
     longitude: number;
+    /** New period in seconds during which the location can be updated, starting from the message send date. If 0x7FFFFFFF is specified, then the location can be updated forever. Otherwise, the new value must not exceed the current live_period by more than a day, and the live location expiration date must remain within the next 90 days. If not specified, then live_period remains unchanged */
+    live_period?: number;
     /** The radius of uncertainty for the location, measured in meters; 0-1500 */
     horizontal_accuracy?: number;
     /** The direction in which user is moving, in degrees; 1-360. For active live locations only. */
@@ -625,7 +626,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -657,7 +658,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -677,8 +678,12 @@ export type ApiMethods = {
     message_thread_id?: number;
     /** Poll question, 1-300 characters */
     question: string;
-    /** A list of answer options, 2-10 strings 1-100 characters each */
-    options: readonly string[];
+    /** Mode for parsing entities in the question. See formatting options for more details. Currently, only custom emoji entities are allowed */
+    question_parse_mode?: string;
+    /** A list of special entities that appear in the poll question. It can be specified instead of question_parse_mode */
+    question_entities?: MessageEntity[];
+    /** A list of 2-10 answer options */
+    options: InputPollOption[];
     /** True, if the poll needs to be anonymous, defaults to True */
     is_anonymous?: boolean;
     /** Poll type, “quiz” or “regular”, defaults to “regular” */
@@ -691,7 +696,7 @@ export type ApiMethods = {
     explanation?: string;
     /** Mode for parsing entities in the explanation. See formatting options for more details. */
     explanation_parse_mode?: ParseMode;
-    /** A list of special entities that appear in the poll explanation, which can be specified instead of parse_mode */
+    /** A list of special entities that appear in the poll explanation. It can be specified instead of explanation_parse_mode */
     explanation_entities?: MessageEntity[];
     /** Amount of time in seconds the poll will be active after creation, 5-600. Can't be used together with close_date. */
     open_period?: number;
@@ -705,7 +710,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -731,7 +736,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -862,7 +867,7 @@ export type ApiMethods = {
     can_invite_users?: boolean;
     /** True if the administrator can post stories to the chat */
     can_post_stories?: boolean;
-    /** True if the administrator can edit stories posted by other users */
+    /** Pass True if the administrator can edit stories posted by other users, post stories to the chat page, pin chat stories, and access the chat's story archive */
     can_edit_stories?: boolean;
     /** True if the administrator can delete stories posted by other users */
     can_delete_stories?: boolean;
@@ -1034,11 +1039,11 @@ export type ApiMethods = {
     chat_id: number | string;
   }): true;
 
-  /** Use this method to get up to date information about the chat. Returns a Chat object on success. */
+  /** Use this method to get up-to-date information about the chat. Returns a ChatFullInfo object on success. */
   getChat(args: {
     /** Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername) */
     chat_id: number | string;
-  }): ChatFromGetChat;
+  }): ChatFullInfo;
 
   /** Use this method to get a list of administrators in a chat, which aren't bots. Returns an Array of ChatMember objects. */
   getChatAdministrators(args: {
@@ -1425,7 +1430,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -1746,7 +1751,7 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
     reply_markup?: InlineKeyboardMarkup;
     /** @deprecated Use `reply_parameters` instead. */
     reply_to_message_id?: number;
