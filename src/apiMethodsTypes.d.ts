@@ -140,6 +140,8 @@ export type ApiMethods = {
     disable_notification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protect_content?: boolean;
+    /** Unique identifier of the message effect to be added to the message */
+    message_effect_id?: string;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
     /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
@@ -200,13 +202,15 @@ export type ApiMethods = {
     parse_mode?: string;
     /** A list of special entities that appear in the new caption, which can be specified instead of parse_mode */
     caption_entities?: MessageEntity[];
+    /** Pass True, if the caption must be shown above the message media. Ignored if a new caption isn't specified. */
+    show_caption_above_media?: boolean;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disable_notification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protect_content?: boolean;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
+    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user. */
     reply_markup?:
       | InlineKeyboardMarkup
       | ReplyKeyboardMarkup
@@ -243,19 +247,23 @@ export type ApiMethods = {
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
     /** Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20. */
-    photo: Buffer | ReadStream | string | string;
+    photo: Buffer | ReadStream | string;
     /** Photo caption (may also be used when resending photos by file_id), 0-1024 characters after entities parsing */
     caption?: string;
     /** Mode for parsing entities in the photo caption. See formatting options for more details. */
     parse_mode?: ParseMode;
     /** A list of special entities that appear in the caption, which can be specified instead of parse_mode */
     caption_entities?: MessageEntity[];
+    /** Pass True, if the caption must be shown above the message media */
+    show_caption_above_media?: boolean;
     /** Pass True if the photo needs to be covered with a spoiler animation */
     has_spoiler?: boolean;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disable_notification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protect_content?: boolean;
+    /** Unique identifier of the message effect to be added to the message */
+    message_effect_id?: string;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
     /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
@@ -268,7 +276,9 @@ export type ApiMethods = {
     reply_to_message_id?: number;
   }): Message.PhotoMessage;
 
-  /** Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future. */
+  /** Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
+
+  For sending voice messages, use the sendVoice method instead. */
   sendAudio(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     business_connection_id?: string;
@@ -277,7 +287,7 @@ export type ApiMethods = {
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
     /** Audio file to send. Pass a file_id as String to send an audio file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or upload a new one using multipart/form-data. */
-    audio: Buffer | ReadStream | string | string;
+    audio: Buffer | ReadStream | string;
     /** Audio caption, 0-1024 characters after entities parsing */
     caption?: string;
     /** Mode for parsing entities in the audio caption. See formatting options for more details. */
@@ -296,6 +306,8 @@ export type ApiMethods = {
     disable_notification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protect_content?: boolean;
+    /** Unique identifier of the message effect to be added to the message */
+    message_effect_id?: string;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
     /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
@@ -317,7 +329,7 @@ export type ApiMethods = {
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
     /** File to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. */
-    document: Buffer | ReadStream | string | string;
+    document: Buffer | ReadStream | string;
     /** Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass "attach://<file_attach_name>" if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. */
     thumbnail?: Buffer | ReadStream | string;
     /** Document caption (may also be used when resending documents by file_id), 0-1024 characters after entities parsing */
@@ -332,6 +344,8 @@ export type ApiMethods = {
     disable_notification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protect_content?: boolean;
+    /** Unique identifier of the message effect to be added to the message */
+    message_effect_id?: string;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
     /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
@@ -353,7 +367,7 @@ export type ApiMethods = {
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
     /** Video to send. Pass a file_id as String to send a video that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new video using multipart/form-data. */
-    video: Buffer | ReadStream | string | string;
+    video: Buffer | ReadStream | string;
     /** Duration of sent video in seconds */
     duration?: number;
     /** Video width */
@@ -368,6 +382,8 @@ export type ApiMethods = {
     parse_mode?: ParseMode;
     /** A list of special entities that appear in the caption, which can be specified instead of parse_mode */
     caption_entities?: MessageEntity[];
+    /** Pass True, if the caption must be shown above the message media */
+    show_caption_above_media?: boolean;
     /** Pass True if the video needs to be covered with a spoiler animation */
     has_spoiler?: boolean;
     /** Pass True if the uploaded video is suitable for streaming */
@@ -376,6 +392,8 @@ export type ApiMethods = {
     disable_notification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protect_content?: boolean;
+    /** Unique identifier of the message effect to be added to the message */
+    message_effect_id?: string;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
     /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
@@ -397,7 +415,7 @@ export type ApiMethods = {
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
     /** Animation to send. Pass a file_id as String to send an animation that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an animation from the Internet, or upload a new animation using multipart/form-data. */
-    animation: Buffer | ReadStream | string | string;
+    animation: Buffer | ReadStream | string;
     /** Duration of sent animation in seconds */
     duration?: number;
     /** Animation width */
@@ -412,12 +430,16 @@ export type ApiMethods = {
     parse_mode?: ParseMode;
     /** A list of special entities that appear in the caption, which can be specified instead of parse_mode */
     caption_entities?: MessageEntity[];
+    /** Pass True, if the caption must be shown above the message media */
+    show_caption_above_media?: boolean;
     /** Pass True if the animation needs to be covered with a spoiler animation */
     has_spoiler?: boolean;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disable_notification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protect_content?: boolean;
+    /** Unique identifier of the message effect to be added to the message */
+    message_effect_id?: string;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
     /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
@@ -430,7 +452,7 @@ export type ApiMethods = {
     reply_to_message_id?: number;
   }): Message.AnimationMessage;
 
-  /** Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future. */
+  /** Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future. */
   sendVoice(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     business_connection_id?: string;
@@ -439,7 +461,7 @@ export type ApiMethods = {
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
     /** Audio file to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. */
-    voice: Buffer | ReadStream | string | string;
+    voice: Buffer | ReadStream | string;
     /** Voice message caption, 0-1024 characters after entities parsing */
     caption?: string;
     /** Mode for parsing entities in the voice message caption. See formatting options for more details. */
@@ -452,6 +474,8 @@ export type ApiMethods = {
     disable_notification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protect_content?: boolean;
+    /** Unique identifier of the message effect to be added to the message */
+    message_effect_id?: string;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
     /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
@@ -474,7 +498,7 @@ export type ApiMethods = {
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
     /** Video note to send. Pass a file_id as String to send a video note that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data.. Sending video notes by a URL is currently unsupported */
-    video_note: Buffer | ReadStream | string | string;
+    video_note: Buffer | ReadStream | string;
     /** Duration of sent video in seconds */
     duration?: number;
     /** Video width and height, i.e. diameter of the video message */
@@ -485,6 +509,8 @@ export type ApiMethods = {
     disable_notification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protect_content?: boolean;
+    /** Unique identifier of the message effect to be added to the message */
+    message_effect_id?: string;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
     /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
@@ -513,6 +539,8 @@ export type ApiMethods = {
     disable_notification?: boolean;
     /** Protects the contents of the sent messages from forwarding and saving */
     protect_content?: boolean;
+    /** Unique identifier of the message effect to be added to the message */
+    message_effect_id?: string;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
     /** @deprecated Use `reply_parameters` instead. */
@@ -548,6 +576,8 @@ export type ApiMethods = {
     disable_notification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protect_content?: boolean;
+    /** Unique identifier of the message effect to be added to the message */
+    message_effect_id?: string;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
     /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
@@ -624,6 +654,8 @@ export type ApiMethods = {
     disable_notification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protect_content?: boolean;
+    /** Unique identifier of the message effect to be added to the message */
+    message_effect_id?: string;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
     /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
@@ -656,6 +688,8 @@ export type ApiMethods = {
     disable_notification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protect_content?: boolean;
+    /** Unique identifier of the message effect to be added to the message */
+    message_effect_id?: string;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
     /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
@@ -708,6 +742,8 @@ export type ApiMethods = {
     disable_notification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protect_content?: boolean;
+    /** Unique identifier of the message effect to be added to the message */
+    message_effect_id?: string;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
     /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
@@ -734,6 +770,8 @@ export type ApiMethods = {
     disable_notification?: boolean;
     /** Protects the contents of the sent message from forwarding */
     protect_content?: boolean;
+    /** Unique identifier of the message effect to be added to the message */
+    message_effect_id?: string;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
     /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
@@ -752,7 +790,7 @@ export type ApiMethods = {
 
   We only recommend using this method when a response from the bot will take a noticeable amount of time to arrive. */
   sendChatAction(args: {
-    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    /** Unique identifier of the business connection on behalf of which the action will be sent */
     business_connection_id?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
@@ -1217,7 +1255,7 @@ export type ApiMethods = {
     business_connection_id: string;
   }): BusinessConnection;
 
-  /** Use this method to change the list of the bot's commands. See https://core.telegram.org/bots#commands for more details about bot commands. Returns True on success. */
+  /** Use this method to change the list of the bot's commands. See https://core.telegram.org/bots/features#commands for more details about bot commands. Returns True on success. */
   setMyCommands(args: {
     /** A list of bot commands to be set as the list of the bot's commands. At most 100 commands can be specified. */
     commands: readonly BotCommand[];
@@ -1347,6 +1385,8 @@ export type ApiMethods = {
     parse_mode?: ParseMode;
     /** A list of special entities that appear in the caption, which can be specified instead of parse_mode */
     caption_entities?: MessageEntity[];
+    /** Pass True, if the caption must be shown above the message media. Supported only for animation, photo and video messages. */
+    show_caption_above_media?: boolean;
     /** An object for an inline keyboard. */
     reply_markup?: InlineKeyboardMarkup;
   }): (Update.Edited & Message.CaptionableMessage) | true;
@@ -1421,13 +1461,15 @@ export type ApiMethods = {
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
     /** Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload a new .WEBP, .TGS, or .WEBM sticker using multipart/form-data. Video and animated stickers can't be sent via an HTTP URL. */
-    sticker: Buffer | ReadStream | string | string;
+    sticker: Buffer | ReadStream | string;
     /** Emoji associated with the sticker; only for just uploaded stickers */
     emoji?: string;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disable_notification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protect_content?: boolean;
+    /** Unique identifier of the message effect to be added to the message */
+    message_effect_id?: string;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
     /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
@@ -1448,7 +1490,7 @@ export type ApiMethods = {
 
   /** Use this method to get information about custom emoji stickers by their identifiers. Returns an Array of Sticker objects. */
   getCustomEmojiStickers(args: {
-    /** List of custom emoji identifiers. At most 200 custom emoji identifiers can be specified. */
+    /** A list of custom emoji identifiers. At most 200 custom emoji identifiers can be specified. */
     custom_emoji_ids: string[];
   }): Sticker[];
 
@@ -1488,18 +1530,6 @@ export type ApiMethods = {
     sticker: InputSticker;
   }): true;
 
-  /** Use this method to replace an existing sticker in a sticker set with a new one. The method is equivalent to calling deleteStickerFromSet, then addStickerToSet, then setStickerPositionInSet. Returns True on success. */
-  replaceStickerInSet(args: {
-    /** User identifier of the sticker set owner */
-    user_id: number;
-    /** Sticker set name */
-    name: string;
-    /** File identifier of the replaced sticker */
-    old_sticker: string;
-    /** An object with information about the added sticker. If exactly the same sticker had already been added to the set, then the set remains unchanged.:x */
-    sticker: InputSticker;
-  }): true;
-
   /** Use this method to move a sticker in a set created by the bot to a specific position. Returns True on success. */
   setStickerPositionInSet(args: {
     /** File identifier of the sticker */
@@ -1512,6 +1542,18 @@ export type ApiMethods = {
   deleteStickerFromSet(args: {
     /** File identifier of the sticker */
     sticker: string;
+  }): true;
+
+  /** Use this method to replace an existing sticker in a sticker set with a new one. The method is equivalent to calling deleteStickerFromSet, then addStickerToSet, then setStickerPositionInSet. Returns True on success. */
+  replaceStickerInSet(args: {
+    /** User identifier of the sticker set owner */
+    user_id: number;
+    /** Sticker set name */
+    name: string;
+    /** File identifier of the replaced sticker */
+    old_sticker: string;
+    /** An object with information about the added sticker. If exactly the same sticker had already been added to the set, then the set remains unchanged.:x */
+    sticker: InputSticker;
   }): true;
 
   /** Use this method to change the list of emoji assigned to a regular or custom emoji sticker. The sticker must belong to a sticker set created by the bot. Returns True on success. */
@@ -1559,7 +1601,7 @@ export type ApiMethods = {
     /** User identifier of the sticker set owner */
     user_id: number;
     /** A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animated-sticker-requirements for animated sticker technical requirements), or a WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-sticker-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files ». Animated and video sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail. */
-    thumbnail?: Buffer | ReadStream | string | string;
+    thumbnail?: Buffer | ReadStream | string;
     /** Format of the thumbnail, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, or “video” for a WEBM video */
     format: "static" | "animated" | "video";
   }): true;
@@ -1611,13 +1653,13 @@ export type ApiMethods = {
     description: string;
     /** Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes. */
     payload: string;
-    /** Payment provider token, obtained via @BotFather */
-    provider_token: string;
-    /** Three-letter ISO 4217 currency code, see more on currencies */
+    /** Payment provider token, obtained via BotFather. Pass an empty string for payments in Telegram Stars. */
+    provider_token?: string;
+    /** Three-letter ISO 4217 currency code, see more on currencies. Pass “XTR” for payments in Telegram Stars. */
     currency: string;
-    /** Price breakdown, a list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.) */
+    /** Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.). Must contain exactly one item for payments in Telegram Stars. */
     prices: readonly LabeledPrice[];
-    /** The maximum accepted amount for tips in the smallest units of the currency (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0 */
+    /** The maximum accepted amount for tips in the smallest units of the currency (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0. Not supported for payments in Telegram Stars. */
     max_tip_amount?: number;
     /** An array of suggested amounts of tips in the smallest units of the currency (integer, not float/double). At most 4 suggested tip amounts can be specified. The suggested tip amounts must be positive, passed in a strictly increased order and must not exceed max_tip_amount. */
     suggested_tip_amounts?: number[];
@@ -1633,24 +1675,26 @@ export type ApiMethods = {
     photo_width?: number;
     /** Photo height */
     photo_height?: number;
-    /** Pass True if you require the user's full name to complete the order */
+    /** Pass True if you require the user's full name to complete the order. Ignored for payments in Telegram Stars. */
     need_name?: boolean;
-    /** Pass True if you require the user's phone number to complete the order */
+    /** Pass True if you require the user's phone number to complete the order. Ignored for payments in Telegram Stars. */
     need_phone_number?: boolean;
-    /** Pass True if you require the user's email address to complete the order */
+    /** Pass True if you require the user's email address to complete the order. Ignored for payments in Telegram Stars. */
     need_email?: boolean;
-    /** Pass True if you require the user's shipping address to complete the order */
+    /** Pass True if you require the user's shipping address to complete the order. Ignored for payments in Telegram Stars. */
     need_shipping_address?: boolean;
-    /** Pass True if the user's phone number should be sent to provider */
+    /** Pass True if the user's phone number should be sent to provider. Ignored for payments in Telegram Stars. */
     send_phone_number_to_provider?: boolean;
-    /** Pass True if the user's email address should be sent to provider */
+    /** Pass True if the user's email address should be sent to provider. Ignored for payments in Telegram Stars. */
     send_email_to_provider?: boolean;
-    /** Pass True if the final price depends on the shipping method */
+    /** Pass True if the final price depends on the shipping method. Ignored for payments in Telegram Stars. */
     is_flexible?: boolean;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disable_notification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protect_content?: boolean;
+    /** Unique identifier of the message effect to be added to the message */
+    message_effect_id?: string;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
     /** An object for an inline keyboard. If empty, one 'Pay total price' button will be shown. If not empty, the first button must be a Pay button. */
@@ -1667,8 +1711,8 @@ export type ApiMethods = {
     description: string;
     /** Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes. */
     payload: string;
-    /** Payment provider token, obtained via BotFather */
-    provider_token: string;
+    /** Payment provider token, obtained via @BotFather. Pass an empty string for payments in Telegram Stars. */
+    provider_token?: string;
     /** Three-letter ISO 4217 currency code, see more on currencies */
     currency: string;
     /** Price breakdown, a list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.) */
@@ -1725,6 +1769,14 @@ export type ApiMethods = {
     error_message?: string;
   }): true;
 
+  /** Refunds a successful payment in Telegram Stars. Returns True on success. */
+  refundStarPayment(args: {
+    /** Identifier of the user whose payment will be refunded */
+    user_id: number;
+    /** Telegram payment identifier */
+    telegram_payment_charge_id: string;
+  }): true;
+
   /** Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change). Returns True on success.
 
   Use this if the data submitted by the user doesn't satisfy the standards your service requires for any reason. For example, if a birthday date seems invalid, a submitted document is blurry, a scan shows evidence of tampering, etc. Supply some details in the error message to make sure the user knows how to correct the issues. */
@@ -1749,9 +1801,11 @@ export type ApiMethods = {
     disable_notification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protect_content?: boolean;
+    /** Unique identifier of the message effect to be added to the message */
+    message_effect_id?: string;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. */
+    /** An object for an inline keyboard. If empty, one 'Play game_title' button will be shown. If not empty, the first button must launch the game. */
     reply_markup?: InlineKeyboardMarkup;
     /** @deprecated Use `reply_parameters` instead. */
     reply_to_message_id?: number;
@@ -1792,10 +1846,10 @@ export type ApiMethods = {
 
 /** This object describes a sticker to be added to a sticker set. */
 export interface InputSticker {
-  /** Format of the thumbnail, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, or “video” for a WEBM video */
-  format: "static" | "animated" | "video";
   /** The added sticker. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. Animated and video stickers can't be uploaded via HTTP URL. */
   sticker: Buffer | ReadStream | string;
+  /** Format of the added sticker, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, “video” for a WEBM video */
+  format: "static" | "animated" | "video";
   /** List of 1-20 emoji associated with the sticker */
   emoji_list: string[];
   /** Position where the mask should be placed on faces. For “mask” stickers only. */
@@ -1825,6 +1879,8 @@ export interface InputMediaPhoto {
   media: Buffer | ReadStream | string;
   /** Caption of the photo to be sent, 0-1024 characters after entities parsing */
   caption?: string;
+  /** Pass True, if the caption must be shown above the message media */
+  show_caption_above_media?: boolean;
   /** Mode for parsing entities in the photo caption. See formatting options for more details. */
   parse_mode?: ParseMode;
   /** List of special entities that appear in the caption, which can be specified instead of parse_mode */
@@ -1843,6 +1899,8 @@ export interface InputMediaVideo {
   thumbnail?: Buffer | ReadStream | string;
   /** Caption of the video to be sent, 0-1024 characters after entities parsing */
   caption?: string;
+  /** Pass True, if the caption must be shown above the message media */
+  show_caption_above_media?: boolean;
   /** Mode for parsing entities in the video caption. See formatting options for more details. */
   parse_mode?: ParseMode;
   /** List of special entities that appear in the caption, which can be specified instead of parse_mode */
@@ -1869,6 +1927,8 @@ export interface InputMediaAnimation {
   thumbnail?: Buffer | ReadStream | string;
   /** Caption of the animation to be sent, 0-1024 characters after entities parsing */
   caption?: string;
+  /** Pass True, if the caption must be shown above the message media */
+  show_caption_above_media?: boolean;
   /** Mode for parsing entities in the animation caption. See formatting options for more details. */
   parse_mode?: ParseMode;
   /** List of special entities that appear in the caption, which can be specified instead of parse_mode */

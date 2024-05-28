@@ -25,7 +25,7 @@ export interface Invoice {
   description: string;
   /** A unique bot deep-linking parameter that can be used to generate this invoice. */
   start_parameter: string;
-  /** The three-letter ISO 4217 currency code. */
+  /** Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars. */
   currency: string;
   /**
    * The total price in the smallest units of the currency (integer, not float/double).
@@ -84,7 +84,7 @@ export interface ShippingOption {
  * This interface contains basic information about a successful payment.
  */
 export interface SuccessfulPayment {
-  /** The three-letter ISO 4217 currency code. */
+  /** Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars. */
   currency: string;
   /**
    * The total price in the smallest units of the currency (integer, not float/double).
@@ -127,7 +127,7 @@ export interface PreCheckoutQuery {
   id: string;
   /** The user who sent the query. */
   from: User;
-  /** The three-letter ISO 4217 currency code. */
+  /** Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars. */
   currency: string;
   /**
    * The total price in the smallest units of the currency (integer, not float/double).
