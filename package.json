@@ -11,6 +11,7 @@
     "api",
     "types"
   ],
+  "homepage": "https://telegramsjs.vercel.app/",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/telegramsjs/types/issues"
