@@ -1,150 +1,129 @@
 import type { User } from "./manageTypes";
 
-/**
- * This interface represents a labeled portion of the price for goods or services.
- */
+/** This object represents a portion of the price for goods or services. */
 export interface LabeledPrice {
-  /** The label of the portion. */
+  /** Portion label */
   label: string;
-  /**
-   * The price of the product in the smallest units of the currency (integer, not float/double).
-   * For example, for a price of US$ 1.45, the amount would be 145.
-   * See the 'exp' parameter in currencies.json for the number of digits past the decimal point for each currency
-   * (2 for the majority of currencies).
-   */
+  /** Price of the product in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). */
   amount: number;
 }
 
-/**
- * This interface contains basic information about an invoice.
- */
+/** This object contains basic information about an invoice. */
 export interface Invoice {
-  /** The name of the product. */
+  /** Product name */
   title: string;
-  /** The description of the product. */
+  /** Product description */
   description: string;
-  /** A unique bot deep-linking parameter that can be used to generate this invoice. */
+  /** Unique bot deep-linking parameter that can be used to generate this invoice */
   start_parameter: string;
-  /** Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars. */
+  /** Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars */
   currency: string;
-  /**
-   * The total price in the smallest units of the currency (integer, not float/double).
-   * For example, for a price of US$ 1.45, the total_amount would be 145.
-   * See the 'exp' parameter in currencies.json for the number of digits past the decimal point for each currency
-   * (2 for the majority of currencies).
-   */
+  /** Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). */
   total_amount: number;
 }
 
-/**
- * This interface represents a shipping address.
- */
+/** This object represents a shipping address. */
 export interface ShippingAddress {
-  /** The two-letter ISO 3166-1 alpha-2 country code. */
+  /** Two-letter ISO 3166-1 alpha-2 country code */
   country_code: string;
-  /** The state, if applicable. */
+  /** State, if applicable */
   state: string;
-  /** The city. */
+  /** City */
   city: string;
-  /** The first line for the address. */
+  /** First line for the address */
   street_line1: string;
-  /** The second line for the address. */
+  /** Second line for the address */
   street_line2: string;
-  /** The address postal code. */
+  /** Address post code */
   post_code: string;
 }
 
-/**
- * This interface represents information about an order.
- */
+/** This object represents information about an order. */
 export interface OrderInfo {
-  /** The user's name. */
+  /** User name */
   name?: string;
-  /** The user's phone number. */
+  /** User's phone number */
   phone_number?: string;
-  /** The user's email. */
+  /** User email */
   email?: string;
-  /** The user's shipping address. */
+  /** User shipping address */
   shipping_address?: ShippingAddress;
 }
 
-/**
- * This interface represents a shipping option.
- */
+/** This object represents one shipping option. */
 export interface ShippingOption {
-  /** The shipping option identifier. */
+  /** Shipping option identifier */
   id: string;
-  /** The title of the option. */
+  /** Option title */
   title: string;
-  /** The list of price portions. */
+  /** List of price portions */
   prices: LabeledPrice[];
 }
 
-/**
- * This interface contains basic information about a successful payment.
- */
+/** This object contains basic information about a successful payment. */
 export interface SuccessfulPayment {
-  /** Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars. */
+  /** Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars */
   currency: string;
-  /**
-   * The total price in the smallest units of the currency (integer, not float/double).
-   * For example, for a price of US$ 1.45, the total_amount would be 145.
-   * See the 'exp' parameter in currencies.json for the number of digits past the decimal point for each currency
-   * (2 for the majority of currencies).
-   */
+  /** Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). */
   total_amount: number;
-  /** The bot-specified invoice payload. */
+  /** Bot specified invoice payload */
   invoice_payload: string;
-  /** The identifier of the shipping option chosen by the user. */
+  /** Identifier of the shipping option chosen by the user */
   shipping_option_id?: string;
-  /** The order information provided by the user. */
+  /** Order information provided by the user */
   order_info?: OrderInfo;
-  /** The Telegram payment identifier. */
+  /** Telegram payment identifier */
   telegram_payment_charge_id: string;
-  /** The provider payment identifier. */
+  /** Provider payment identifier */
   provider_payment_charge_id: string;
 }
 
-/**
- * This interface contains information about an incoming shipping query.
- */
-export interface ShippingQuery {
-  /** The unique query identifier. */
-  id: string;
-  /** The user who sent the query. */
-  from: User;
-  /** The bot-specified invoice payload. */
+/** This object contains basic information about a refunded payment. */
+export interface RefundedPayment {
+  /** Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars. Currently, always “XTR” */
+  currency: string;
+  /** Total refunded price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45, total_amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). */
+  total_amount: number;
+  /** Bot-specified invoice payload */
   invoice_payload: string;
-  /** The user-specified shipping address. */
+  /** Telegram payment identifier */
+  telegram_payment_charge_id: string;
+  /** Provider payment identifier */
+  provider_payment_charge_id?: string;
+}
+
+/** This object contains information about an incoming shipping query. */
+export interface ShippingQuery {
+  /** Unique query identifier */
+  id: string;
+  /** User who sent the query */
+  from: User;
+  /** Bot specified invoice payload */
+  invoice_payload: string;
+  /** User specified shipping address */
   shipping_address: ShippingAddress;
 }
 
-/**
- * This interface contains information about an incoming pre-checkout query.
- */
+/** This object contains information about an incoming pre-checkout query. */
 export interface PreCheckoutQuery {
-  /** The unique query identifier. */
+  /** Unique query identifier */
   id: string;
-  /** The user who sent the query. */
+  /** User who sent the query */
   from: User;
-  /** Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars. */
+  /** Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars */
   currency: string;
-  /**
-   * The total price in the smallest units of the currency (integer, not float/double).
-   * For example, for a price of US$ 1.45, the total_amount would be 145.
-   * See the 'exp' parameter in currencies.json for the number of digits past the decimal point for each currency
-   * (2 for the majority of currencies).
-   */
+  /** Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). */
   total_amount: number;
-  /** The bot-specified invoice payload. */
+  /** Bot specified invoice payload */
   invoice_payload: string;
-  /** The identifier of the shipping option chosen by the user. */
+  /** Identifier of the shipping option chosen by the user */
   shipping_option_id?: string;
-  /** The order information provided by the user. */
+  /** Order information provided by the user */
   order_info?: OrderInfo;
 }
 
 /** This object describes the state of a revenue withdrawal operation. Currently, it can be one of
+
 - RevenueWithdrawalStatePending
 - RevenueWithdrawalStateSucceeded
 - RevenueWithdrawalStateFailed */
@@ -176,13 +155,26 @@ export interface RevenueWithdrawalStateFailed {
 }
 
 /** This object describes the source of a transaction, or its recipient for outgoing transactions. Currently, it can be one of
-- TransactionPartnerFragment
+
 - TransactionPartnerUser
+- TransactionPartnerFragment
+- TransactionPartnerTelegramAds
 - TransactionPartnerOther */
 export type TransactionPartner =
-  | TransactionPartnerFragment
   | TransactionPartnerUser
+  | TransactionPartnerFragment
+  | TransactionPartnerTelegramAds
   | TransactionPartnerOther;
+
+/** Describes a transaction with a user. */
+export interface TransactionPartnerUser {
+  /** Type of the transaction partner, always “user” */
+  type: "user";
+  /** Information about the user */
+  user: User;
+  /** Bot-specified invoice payload */
+  invoice_payload?: string;
+}
 
 /** Describes a withdrawal transaction with Fragment. */
 export interface TransactionPartnerFragment {
@@ -192,12 +184,10 @@ export interface TransactionPartnerFragment {
   withdrawal_state?: RevenueWithdrawalState;
 }
 
-/** Describes a transaction with a user. */
-export interface TransactionPartnerUser {
-  /** Type of the transaction partner, always “user” */
-  type: "user";
-  /** Information about the user */
-  user: User;
+/** Describes a withdrawal transaction to the Telegram Ads platform. */
+export interface TransactionPartnerTelegramAds {
+  /** Type of the transaction partner, always “telegram_ads” */
+  type: "telegram_ads";
 }
 
 /** Describes a transaction with an unknown source or recipient. */

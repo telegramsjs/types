@@ -1,7 +1,7 @@
 import type { Chat, User } from "./manageTypes";
 import type { InlineKeyboardMarkup } from "./markupTypes";
 import type { PassportData } from "./passportTypes";
-import type { Invoice, SuccessfulPayment } from "./invoiceTypes";
+import type { Invoice, RefundedPayment, SuccessfulPayment } from "./invoiceTypes";
 
 type MsgWith<P extends keyof Message> = Record<P, NonNullable<Message[P]>>;
 
@@ -88,6 +88,7 @@ export declare namespace Message {
   export type GameMessage = CommonMessage & MsgWith<"game">;
   export type PollMessage = CommonMessage & MsgWith<"poll">;
   export type LocationMessage = CommonMessage & MsgWith<"location">;
+  export type PaidMediaMessage = CommonMessage & MsgWith<"paid_media">;
   export type VenueMessage = LocationMessage & MsgWith<"venue">;
   export type NewChatMembersMessage = ServiceMessage &
     MsgWith<"new_chat_members">;
@@ -113,6 +114,8 @@ export declare namespace Message {
   export type InvoiceMessage = ServiceMessage & MsgWith<"invoice">;
   export type SuccessfulPaymentMessage = ServiceMessage &
     MsgWith<"successful_payment">;
+  export type RefundedPaymentMessage = ServiceMessage &
+    MsgWith<"refunded_payment">;
   export type UsersSharedMessage = ServiceMessage & MsgWith<"users_shared">;
   export type ChatSharedMessage = ServiceMessage & MsgWith<"chat_shared">;
   export type ConnectedWebsiteMessage = ServiceMessage &
@@ -192,6 +195,8 @@ export interface Message extends Message.MediaMessage {
   venue?: Venue;
   /** Message is a shared location, information about the location */
   location?: Location;
+  /** Message contains paid media; information about the paid media */
+  paid_media?: PaidMediaInfo;
   /** New members that were added to the group or supergroup and information about them (the bot itself may be one of these members) */
   new_chat_members?: User[];
   /** A member was removed from the group, information about them (this member may be the bot itself) */
@@ -220,6 +225,8 @@ export interface Message extends Message.MediaMessage {
   invoice?: Invoice;
   /** Message is a service message about a successful payment, information about the payment. More about payments » */
   successful_payment?: SuccessfulPayment;
+  /** Message is a service message about a refunded payment, information about the payment. More about payments » */
+  refunded_payment?: RefundedPayment;
   /** Service message: users were shared with the bot */
   users_shared?: UsersShared;
   /** Service message: a chat was shared with the bot */
@@ -530,6 +537,8 @@ export interface ExternalReplyInfo {
   invoice?: Invoice;
   /** Message is a shared location, information about the location */
   location?: Location;
+  /** Message contains paid media; information about the paid media */
+  paid_media?: PaidMediaInfo;
   /** Message is a native poll, information about the poll */
   poll?: Poll;
   /** Message is a venue, information about the venue */
@@ -837,6 +846,48 @@ export interface Location {
   heading?: number;
   /** The maximum distance for proximity alerts about approaching another chat member, in meters. For sent live locations only. */
   proximity_alert_radius?: number;
+}
+
+/** Describes the paid media added to a message. */
+export interface PaidMediaInfo {
+  /** The number of Telegram Stars that must be paid to buy access to the media */
+  star_count: number;
+  /** Information about the paid media */
+  paid_media: PaidMedia[];
+}
+
+/** This object describes paid media. Currently, it can be one of
+- PaidMediaPreview
+- PaidMediaPhoto
+- PaidMediaVideo */
+export type PaidMedia = PaidMediaPreview | PaidMediaPhoto | PaidMediaVideo;
+
+/** The paid media isn't available before the payment. */
+export interface PaidMediaPreview {
+  /** Type of the paid media, always “preview” */
+  type: "preview";
+  /** Media width as defined by the sender */
+  width?: number;
+  /** Media height as defined by the sender */
+  height?: number;
+  /** Duration of the media in seconds as defined by the sender */
+  duration?: number;
+}
+
+/** The paid media is a photo. */
+export interface PaidMediaPhoto {
+  /** Type of the paid media, always “photo” */
+  type: "photo";
+  /** The photo */
+  photo: PhotoSize[];
+}
+
+/** The paid media is a video. */
+export interface PaidMediaVideo {
+  /** Type of the paid media, always “video” */
+  type: "video";
+  /** The video */
+  video: Video;
 }
 
 /** This object represents a venue. */
