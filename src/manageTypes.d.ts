@@ -60,7 +60,9 @@ export interface UserFromGetMe extends User {
   /** True, if the bot supports inline queries. Returned only in getMe. */
   supports_inline_queries: boolean;
   /** True, if the bot can be connected to a Telegram Business account to receive its messages. Returned only in getMe. */
-  can_connect_to_business?: boolean;
+  can_connect_to_business: boolean;
+  /** True, if the bot has main Web App. Returned only in getMe. */
+  has_main_web_app: boolean;
 }
 
 export declare namespace Chat {
@@ -240,7 +242,7 @@ export declare namespace ChatFullInfo {
     /** Type of the chat, can be either “private”, “group”, “supergroup” or “channel” */
     type: "group";
     /** Title, for supergroups, channels and group chats */
-    title?: string;
+    title: string;
     /**  Username, for private chats, supergroups and channels if available */
     username?: undefined;
     /**  First name of the other party in a private chat */
@@ -331,7 +333,7 @@ export declare namespace ChatFullInfo {
     /** Type of the chat, can be either “private”, “group”, “supergroup” or “channel” */
     type: "supergroup";
     /** Title, for supergroups, channels and group chats */
-    title?: string;
+    title: string;
     /**  Username, for private chats, supergroups and channels if available */
     username?: string;
     /**  First name of the other party in a private chat */
@@ -422,7 +424,7 @@ export declare namespace ChatFullInfo {
     /** Type of the chat, can be either “private”, “group”, “supergroup” or “channel” */
     type: "channel";
     /** Title, for supergroups, channels and group chats */
-    title?: string;
+    title: string;
     /**  Username, for private chats, supergroups and channels if available */
     username?: string;
     /**  First name of the other party in a private chat */

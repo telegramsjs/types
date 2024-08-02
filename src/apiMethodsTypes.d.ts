@@ -154,8 +154,6 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-    /** @deprecated Use `reply_parameters` instead. */
-    reply_to_message_id?: number;
   }): Message.TextMessage;
 
   /** Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded. On success, the sent Message is returned. */
@@ -220,8 +218,6 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-    /** @deprecated Use `reply_parameters` instead. */
-    reply_to_message_id?: number;
   }): MessageId;
 
   /** Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages,  and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned. */
@@ -276,8 +272,6 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-    /** @deprecated Use `reply_parameters` instead. */
-    reply_to_message_id?: number;
   }): Message.PhotoMessage;
 
   /** Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
@@ -320,8 +314,6 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-    /** @deprecated Use `reply_parameters` instead. */
-    reply_to_message_id?: number;
   }): Message.AudioMessage;
 
   /** Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future. */
@@ -358,8 +350,6 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-    /** @deprecated Use `reply_parameters` instead. */
-    reply_to_message_id?: number;
   }): Message.DocumentMessage;
 
   /** Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future. */
@@ -406,8 +396,6 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-    /** @deprecated Use `reply_parameters` instead. */
-    reply_to_message_id?: number;
   }): Message.VideoMessage;
 
   /** Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future. */
@@ -452,8 +440,6 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-    /** @deprecated Use `reply_parameters` instead. */
-    reply_to_message_id?: number;
   }): Message.AnimationMessage;
 
   /** Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future. */
@@ -488,8 +474,6 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-    /** @deprecated Use `reply_parameters` instead. */
-    reply_to_message_id?: number;
   }): Message.VoiceMessage;
 
   /** Use this method to send video messages. On success, the sent Message is returned.
@@ -523,8 +507,6 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-    /** @deprecated Use `reply_parameters` instead. */
-    reply_to_message_id?: number;
   }): Message.VideoNoteMessage;
 
   /** Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Messages that were sent is returned. */
@@ -547,8 +529,6 @@ export type ApiMethods = {
     message_effect_id?: string;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
-    /** @deprecated Use `reply_parameters` instead. */
-    reply_to_message_id?: number;
   }): Array<
     | Message.AudioMessage
     | Message.DocumentMessage
@@ -590,8 +570,6 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-    /** @deprecated Use `reply_parameters` instead. */
-    reply_to_message_id?: number;
   }): Message.LocationMessage;
 
   /** Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. */
@@ -702,8 +680,6 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-    /** @deprecated Use `reply_parameters` instead. */
-    reply_to_message_id?: number;
   }): Message.VenueMessage;
 
   /** Use this method to send phone contacts. On success, the sent Message is returned. */
@@ -736,8 +712,6 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-    /** @deprecated Use `reply_parameters` instead. */
-    reply_to_message_id?: number;
   }): Message.ContactMessage;
 
   /** Use this method to send a native poll. On success, the sent Message is returned. */
@@ -790,8 +764,6 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-    /** @deprecated Use `reply_parameters` instead. */
-    reply_to_message_id?: number;
   }): Message.PollMessage;
 
   /** Use this method to send an animated emoji that will display a random value. On success, the sent Message is returned. */
@@ -818,8 +790,6 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-    /** @deprecated Use `reply_parameters` instead. */
-    reply_to_message_id?: number;
   }): Message.DiceMessage;
 
   /** Use this method when you need to tell the user that something is happening on the bot's side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns True on success.
@@ -879,8 +849,7 @@ export type ApiMethods = {
     file_id: string;
   }): File;
 
-  /** Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success.
-   * @deprecated Use `banChatMember` instead. */
+  /** Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   kickChatMember: ApiMethods["banChatMember"];
 
   /** Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
@@ -1087,6 +1056,8 @@ export type ApiMethods = {
 
   /** Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True on success. */
   pinChatMessage(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be pinned */
+    business_connection_id?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
     /** Identifier of a message to pin */
@@ -1097,9 +1068,11 @@ export type ApiMethods = {
 
   /** Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True on success. */
   unpinChatMessage(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be unpinned */
+    business_connection_id?: string;
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
-    /** Identifier of a message to unpin. If not specified, the most recent pinned message (by sending date) will be unpinned. */
+    /** Identifier of the message to unpin. Required if business_connection_id is specified. If not specified, the most recent pinned message (by sending date) will be unpinned. */
     message_id?: number;
   }): true;
 
@@ -1126,10 +1099,6 @@ export type ApiMethods = {
     /** Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername) */
     chat_id: number | string;
   }): Array<ChatMemberOwner | ChatMemberAdministrator>;
-
-  /** Use this method to get the number of members in a chat. Returns Int on success.
-   * @deprecated Use `getChatMemberCount` instead. */
-  getChatMembersCount: ApiMethods["getChatMemberCount"];
 
   /** Use this method to get the number of members in a chat. Returns Int on success. */
   getChatMemberCount(args: {
@@ -1526,8 +1495,6 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-    /** @deprecated Use `reply_parameters` instead. */
-    reply_to_message_id?: number;
   }): Message.StickerMessage;
 
   /** Use this method to get a sticker set. On success, a StickerSet object is returned. */
@@ -1648,7 +1615,7 @@ export type ApiMethods = {
     name: string;
     /** User identifier of the sticker set owner */
     user_id: number;
-    /** A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animated-sticker-requirements for animated sticker technical requirements), or a WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-sticker-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files ». Animated and video sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail. */
+    /** A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animation-requirements for animated sticker technical requirements), or a WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files ». Animated and video sticker set thumbnails can't be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail. */
     thumbnail?: Buffer | ReadStream | string;
     /** Format of the thumbnail, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, or “video” for a WEBM video */
     format: "static" | "animated" | "video";
@@ -1747,8 +1714,6 @@ export type ApiMethods = {
     reply_parameters?: ReplyParameters;
     /** An object for an inline keyboard. If empty, one 'Pay total price' button will be shown. If not empty, the first button must be a Pay button. */
     reply_markup?: InlineKeyboardMarkup;
-    /** @deprecated Use `reply_parameters` instead. */
-    reply_to_message_id?: number;
   }): Message.InvoiceMessage;
 
   /** Use this method to create a link for an invoice. Returns the created invoice link as String on success. */
@@ -1863,8 +1828,6 @@ export type ApiMethods = {
     reply_parameters?: ReplyParameters;
     /** An object for an inline keyboard. If empty, one 'Play game_title' button will be shown. If not empty, the first button must launch the game. */
     reply_markup?: InlineKeyboardMarkup;
-    /** @deprecated Use `reply_parameters` instead. */
-    reply_to_message_id?: number;
   }): Message.GameMessage;
 
   /** Use this method to set the score of the specified user in a game message. On success, if the message is not an inline message, the Message is returned, otherwise True is returned. Returns an error, if the new score is not greater than the user's current score in the chat and force is False. */

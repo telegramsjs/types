@@ -1,7 +1,11 @@
 import type { Chat, User } from "./manageTypes";
 import type { InlineKeyboardMarkup } from "./markupTypes";
 import type { PassportData } from "./passportTypes";
-import type { Invoice, RefundedPayment, SuccessfulPayment } from "./invoiceTypes";
+import type {
+  Invoice,
+  RefundedPayment,
+  SuccessfulPayment,
+} from "./invoiceTypes";
 
 type MsgWith<P extends keyof Message> = Record<P, NonNullable<Message[P]>>;
 
