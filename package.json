@@ -1,6 +1,6 @@
 {
   "name": "@telegram.ts/types",
-  "version": "1.13.0",
+  "version": "1.14.0",
   "description": "Comprehensive Type Declarations for Telegram Bot API with telegramsjs",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
