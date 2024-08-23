@@ -1428,7 +1428,7 @@ export interface ReactionTypeCustomEmoji {
   /** Type of the reaction, always “custom_emoji” */
   type: "custom_emoji";
   /** Custom emoji identifier */
-  custom_emoji: string;
+  custom_emoji_id: string;
 }
 
 /** The reaction is paid. */
