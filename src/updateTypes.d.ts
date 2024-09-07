@@ -17,7 +17,11 @@ import type {
   Poll,
   PollAnswer,
 } from "./messageTypes";
-import type { PreCheckoutQuery, ShippingQuery } from "./invoiceTypes";
+import type {
+  PaidMediaPurchased,
+  PreCheckoutQuery,
+  ShippingQuery,
+} from "./invoiceTypes";
 
 /**
  * Namespace used internally to define more accurate message update types.
@@ -164,4 +168,7 @@ export interface Update {
 
   /** A boost was removed from a chat. The bot must be an administrator in the chat to receive these updates. */
   removed_chat_boost?: ChatBoostRemoved;
+
+  /** A user purchased paid media with a non-empty payload sent by the bot in a non-channel chat */
+  purchased_paid_media?: PaidMediaPurchased;
 }
