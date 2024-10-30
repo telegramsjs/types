@@ -1,4 +1,4 @@
-import type { WebAppInfo } from "./markupTypes.js";
+import type { WebAppInfo } from "./markupTypes";
 
 /**
  * This interface represents the name of the bot.

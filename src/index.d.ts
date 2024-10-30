@@ -6,5 +6,6 @@ export * from "./messageTypes";
 export * from "./apiMethodsTypes";
 export * from "./passportTypes";
 export * from "./invoiceTypes";
+export * from "./languageTypes";
 export * from "./botCommandTypes";
 export * from "./updateTypes";
