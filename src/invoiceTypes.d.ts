@@ -160,11 +160,13 @@ export interface RevenueWithdrawalStateFailed {
 - TransactionPartnerUser
 - TransactionPartnerFragment
 - TransactionPartnerTelegramAds
+- TransactionPartnerTelegramApi 
 - TransactionPartnerOther */
 export type TransactionPartner =
   | TransactionPartnerUser
   | TransactionPartnerFragment
   | TransactionPartnerTelegramAds
+  | TransactionPartnerTelegramApi
   | TransactionPartnerOther;
 
 /** Describes a transaction with a user. */
@@ -187,6 +189,14 @@ export interface TransactionPartnerFragment {
   type: "fragment";
   /** State of the transaction if the transaction is outgoing */
   withdrawal_state?: RevenueWithdrawalState;
+}
+
+/** Describes a transaction with payment for paid broadcasting. */
+export interface TransactionPartnerTelegramApi {
+  /** Type of the transaction partner, always “telegram_api” */
+  type: "telegram_api";
+  /** The number of successful requests that exceeded regular limits and were therefore billed */
+  request_count: number;
 }
 
 /** Describes a withdrawal transaction to the Telegram Ads platform. */
