@@ -1,5 +1,4 @@
 import type { Chat, User } from "./manageTypes";
-import type { LanguageCode } from "./languageTypes";
 import type { InlineKeyboardMarkup } from "./markupTypes";
 import type { PassportData } from "./passportTypes";
 import type {
@@ -459,7 +458,7 @@ export declare namespace MessageEntity {
   export interface PreMessageEntity extends AbstractMessageEntity {
     type: "pre";
     /** For “pre” only, the programming language of the entity text */
-    language?: LanguageCode;
+    language?: string;
   }
   export interface TextLinkMessageEntity extends AbstractMessageEntity {
     type: "text_link";

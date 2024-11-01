@@ -44,7 +44,7 @@ export declare namespace InlineKeyboardButton {
     /** If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot's username and the specified inline query in the input field. Not supported for messages sent on behalf of a Telegram Business account. */
     switch_inline_query_chosen_chat: SwitchInlineQueryChosenChat;
   }
-  export interface CopyTextButton extends AbstractInlineKeyboardButton {
+  export interface CopyTextButtonButton extends AbstractInlineKeyboardButton {
     /**  Description of the button that copies the specified text to the clipboard. */
     copy_text: CopyTextButton;
   }
@@ -71,7 +71,7 @@ export type InlineKeyboardButton =
   | InlineKeyboardButton.SwitchInlineButton
   | InlineKeyboardButton.SwitchInlineCurrentChatButton
   | InlineKeyboardButton.SwitchInlineChosenChatButton
-  | InlineKeyboardButton.CopyTextButton
+  | InlineKeyboardButton.CopyTextButtonButton
   | InlineKeyboardButton.UrlButton
   | InlineKeyboardButton.WebAppButton;
 
