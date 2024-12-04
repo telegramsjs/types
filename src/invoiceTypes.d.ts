@@ -1,4 +1,4 @@
-import type { User } from "./manageTypes";
+import type { Chat, User } from "./manageTypes";
 import type { PaidMedia, Sticker } from "./messageTypes";
 
 /** This object represents a portion of the price for goods or services. */
@@ -161,10 +161,25 @@ export interface RevenueWithdrawalStateFailed {
   type: "failed";
 }
 
+/** Contains information about the affiliate that received a commission via this transaction. */
+export interface AffiliateInfo {
+  /** The bot or the user that received an affiliate commission if it was received by a bot or a user */
+  affiliate_user?: User;
+  /** The chat that received an affiliate commission if it was received by a chat */
+  affiliate_chat?: Chat;
+  /** The number of Telegram Stars received by the affiliate for each 1000 Telegram Stars received by the bot from referred users */
+  commission_per_mille: number;
+  /** Integer amount of Telegram Stars received by the affiliate from the transaction, rounded to 0; can be negative for refunds */
+  amount: number;
+  /** The number of 1/1000000000 shares of Telegram Stars received by the affiliate; from -999999999 to 999999999; can be negative for refunds */
+  nanostar_amount?: number;
+}
+
 /** This object describes the source of a transaction, or its recipient for outgoing transactions. Currently, it can be one of
 
 - TransactionPartnerUser
 - TransactionPartnerFragment
+- TransactionPartnerAffiliateProgram
 - TransactionPartnerTelegramAds
 - TransactionPartnerTelegramApi 
 - TransactionPartnerOther */
@@ -181,6 +196,8 @@ export interface TransactionPartnerUser {
   type: "user";
   /** Information about the user */
   user: User;
+  /** Information about the affiliate that received a commission via this transaction */
+  affiliate?: AffiliateInfo;
   /** The duration of the paid subscription */
   subscription_period?: number;
   /** Bot-specified invoice payload */
@@ -191,6 +208,16 @@ export interface TransactionPartnerUser {
   paid_media_payload?: string;
   /** The gift sent to the user by the bot */
   gift?: string;
+}
+
+/** Describes the affiliate program that issued the affiliate commission received via this transaction. */
+export interface TransactionPartnerAffiliateProgram {
+  /** Type of the transaction partner, always “affiliate_program” */
+  type: "affiliate_program";
+  /** Information about the bot that sponsored the affiliate program */
+  sponsor_user?: User;
+  /** The number of Telegram Stars received by the bot for each 1000 Telegram Stars received by the affiliate program sponsor from referred users */
+  commission_per_mille: number;
 }
 
 /** Describes a withdrawal transaction with Fragment. */
@@ -225,8 +252,10 @@ export interface TransactionPartnerOther {
 export interface StarTransaction {
   /** Unique identifier of the transaction. Coincides with the identifer of the original transaction for refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from users. */
   id: string;
-  /** Number of Telegram Stars transferred by the transaction */
+  /** Integer amount of Telegram Stars transferred by the transaction */
   amount: number;
+  /** The number of 1/1000000000 shares of Telegram Stars transferred by the transaction; from 0 to 999999999 */
+  nanostar_amount?: number;
   /** Date the transaction was created in Unix time */
   date: number;
   /** Source of an incoming transaction (e.g., a user purchasing goods or services, Fragment refunding a failed withdrawal). Only for incoming transactions */
