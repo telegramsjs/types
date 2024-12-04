@@ -186,6 +186,7 @@ export interface AffiliateInfo {
 export type TransactionPartner =
   | TransactionPartnerUser
   | TransactionPartnerFragment
+  | TransactionPartnerAffiliateProgram
   | TransactionPartnerTelegramAds
   | TransactionPartnerTelegramApi
   | TransactionPartnerOther;
