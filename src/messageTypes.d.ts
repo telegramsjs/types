@@ -1041,7 +1041,7 @@ export interface BackgroundTypeWallpaper {
   is_moving?: true;
 }
 
-/** The background is a PNG or TGV (gzipped subset of SVG with MIME type “application/x-tgwallpattern”) pattern to be combined with the background fill chosen by the user. */
+/** The background is a .PNG or .TGV (gzipped subset of SVG with MIME type “application/x-tgwallpattern”) pattern to be combined with the background fill chosen by the user. */
 export interface BackgroundTypePattern {
   /** Type of the background, always “pattern” */
   type: "pattern";
