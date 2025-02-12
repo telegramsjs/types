@@ -209,6 +209,8 @@ export declare namespace ChatFullInfo {
     pinned_message?: Message;
     /** Default chat member permissions, for groups and supergroups */
     permissions?: undefined;
+    /** True, if gifts can be sent to the chat */
+    can_send_gift?: true;
     /** For supergroups, the minimum allowed delay between consecutive messages sent by each unprivileged user; in seconds */
     slow_mode_delay?: undefined;
     /**  For supergroups, the minimum number of boosts that a non-administrator user needs to add in order to ignore slow mode and chat permissions */
@@ -300,6 +302,8 @@ export declare namespace ChatFullInfo {
     pinned_message?: Message;
     /** Default chat member permissions, for groups and supergroups */
     permissions?: ChatPermissions;
+    /** True, if gifts can be sent to the chat */
+    can_send_gift?: true;
     /** For supergroups, the minimum allowed delay between consecutive messages sent by each unprivileged user; in seconds */
     slow_mode_delay?: undefined;
     /**  For supergroups, the minimum number of boosts that a non-administrator user needs to add in order to ignore slow mode and chat permissions */
@@ -391,6 +395,8 @@ export declare namespace ChatFullInfo {
     pinned_message?: Message;
     /** Default chat member permissions, for groups and supergroups */
     permissions?: ChatPermissions;
+    /** True, if gifts can be sent to the chat */
+    can_send_gift?: true;
     /** For supergroups, the minimum allowed delay between consecutive messages sent by each unprivileged user; in seconds */
     slow_mode_delay?: number;
     /**  For supergroups, the minimum number of boosts that a non-administrator user needs to add in order to ignore slow mode and chat permissions */
@@ -482,6 +488,8 @@ export declare namespace ChatFullInfo {
     pinned_message?: Message;
     /** Default chat member permissions, for groups and supergroups */
     permissions?: undefined;
+    /** True, if gifts can be sent to the chat */
+    can_send_gift?: true;
     /** For supergroups, the minimum allowed delay between consecutive messages sent by each unprivileged user; in seconds */
     slow_mode_delay?: undefined;
     /**  For supergroups, the minimum number of boosts that a non-administrator user needs to add in order to ignore slow mode and chat permissions */
