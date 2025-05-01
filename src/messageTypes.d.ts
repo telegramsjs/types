@@ -2,9 +2,12 @@ import type { Chat, User } from "./manageTypes";
 import type { InlineKeyboardMarkup } from "./markupTypes";
 import type { PassportData } from "./passportTypes";
 import type {
+  GiftInfo,
   Invoice,
+  PaidMessagePriceChanged,
   RefundedPayment,
   SuccessfulPayment,
+  UniqueGiftInfo,
 } from "./invoiceTypes";
 
 type MsgWith<P extends keyof Message> = Record<P, NonNullable<Message[P]>>;
@@ -61,6 +64,8 @@ export declare namespace Message {
     link_preview_options?: LinkPreviewOptions;
     /** Unique identifier of the message effect added to the message */
     effect_id?: string;
+    /** The number of Telegram Stars that were paid by the sender of the message to send it */
+    paid_star_count?: number;
     /** Inline keyboard attached to the message. login_url buttons are represented as ordinary url buttons. */
     reply_markup?: InlineKeyboardMarkup;
   }
@@ -151,6 +156,10 @@ export declare namespace Message {
     MsgWith<"giveaway_winners">;
   export type GiveawayCompletedMessage = ServiceMessage &
     MsgWith<"giveaway_completed">;
+  export type GiftMessage = ServiceMessage & MsgWith<"gift">;
+  export type UniqueGiftMessage = ServiceMessage & MsgWith<"unique_gift">;
+  export type PaidMessagePriceChangedMessage = ServiceMessage &
+    MsgWith<"paid_message_price_changed">;
   export type VideoChatScheduledMessage = ServiceMessage &
     MsgWith<"video_chat_scheduled">;
   export type VideoChatStartedMessage = ServiceMessage &
@@ -267,6 +276,12 @@ export interface Message extends Message.MediaMessage {
   giveaway_winners?: GiveawayWinners;
   /** Service message: a giveaway without public winners was completed */
   giveaway_completed?: GiveawayCompleted;
+  /** Service message: a regular gift was sent or received */
+  gift?: GiftInfo;
+  /** Service message: a unique gift was sent or received */
+  unique_gift?: UniqueGiftInfo;
+  /** Service message: the price for paid messages has changed in the chat */
+  paid_message_price_changed?: PaidMessagePriceChanged;
   /** Service message: video chat scheduled */
   video_chat_scheduled?: VideoChatScheduled;
   /** Service message: video chat started */

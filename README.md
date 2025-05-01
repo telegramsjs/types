@@ -1,3 +1,7 @@
+[![Bot API](https://img.shields.io/badge/Bot%20API-v.9.0-00aced.svg?style=flat-square&logo=telegram)](https://core.telegram.org/bots/api)
+[![NPM Version](https://img.shields.io/npm/v/@telegram.ts/types.svg?maxAge=3600)](https://www.npmjs.com/package/@telegram.ts/types)
+[![NPM Downloads](https://img.shields.io/npm/dt/@telegram.ts/types.svg?maxAge=3600)](https://www.npmjs.com/package/@telegram.ts/types)
+
 # @telegram.ts/types: Type Declarations for Telegram Bot API
 
 The `@telegram.ts/types` package provides comprehensive type declarations for the Telegram Bot API, specifically tailored for use with `telegramsjs`.

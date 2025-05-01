@@ -8,4 +8,5 @@ export * from "./passportTypes";
 export * from "./invoiceTypes";
 export * from "./languageTypes";
 export * from "./botCommandTypes";
+export * from "./storyTypes";
 export * from "./updateTypes";
