@@ -1,4 +1,5 @@
 export * from "./telegramTypes";
+export * from "./checkListTask";
 export * from "./inlineTypes";
 export * from "./manageTypes";
 export * from "./markupTypes";

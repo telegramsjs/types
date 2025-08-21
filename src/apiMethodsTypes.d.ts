@@ -1,6 +1,7 @@
 import type { ReadStream } from "node:fs";
 import type { Buffer } from "node:buffer";
 import type { LanguageCode } from "./languageTypes";
+import type { InputChecklist } from "./checkListTask";
 import type {
   InlineQueryResult,
   InlineQueryResultsButton,
@@ -46,6 +47,7 @@ import type {
   Sticker,
   StickerSet,
   Story,
+  SuggestedPostParameters,
 } from "./messageTypes";
 import type { PassportElementError } from "./passportTypes";
 import type {
@@ -86,7 +88,7 @@ export type ApiMethods = {
     allowed_updates?: ReadonlyArray<Exclude<keyof Update, "update_id">>;
   }): Update[];
 
-  /** Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful request (a request with response HTTP status code different from 2XY), we will repeat the request  and give up after a reasonable amount of attempts. Returns True on success.
+  /** Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful request (a request with response HTTP status code different from 2XY), we will repeat the request and give up after a reasonable amount of attempts. Returns True on success.
 
   If you'd like to make sure that the webhook was set by you, you can specify secret data in the parameter secret_token. If specified, the request will contain a header “X-Telegram-Bot-Api-Secret-Token” with the secret token as content.
 
@@ -141,6 +143,8 @@ export type ApiMethods = {
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    direct_messages_topic_id?: number;
     /** Text of the message to be sent, 1-4096 characters after entities parsing */
     text: string;
     /** Mode for parsing entities in the message text. See formatting options for more details. */
@@ -155,6 +159,8 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allow_paid_broadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggested_post_parameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     message_effect_id?: string;
     /** Description of the message to reply to */
@@ -165,6 +171,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
+    /** @deprecated Use `reply_parameters` instead. */
+    reply_to_message_id?: number;
   }): Message.TextMessage;
 
   /** Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded. On success, the sent Message is returned. */
@@ -173,10 +181,14 @@ export type ApiMethods = {
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
+    /** Identifier of the direct messages topic to which the message will be forwarded; required if the message is forwarded to a direct messages chat */
+    direct_messages_topic_id?: number;
     /** Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername) */
     from_chat_id: number | string;
     /** New start timestamp for the copied video in the message */
     video_start_timestamp?: number;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only */
+    suggested_post_parameters?: SuggestedPostParameters;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disable_notification?: boolean;
     /** Protects the contents of the forwarded message from forwarding and saving */
@@ -191,6 +203,8 @@ export type ApiMethods = {
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
+    /** Identifier of the direct messages topic to which the messages will be forwarded; required if the messages are forwarded to a direct messages chat */
+    direct_messages_topic_id?: number;
     /** Unique identifier for the chat where the original messages were sent (or channel username in the format @channelusername) */
     from_chat_id: number | string;
     /** A list of 1-100 identifiers of messages in the chat from_chat_id to forward. The identifiers must be specified in a strictly increasing order. */
@@ -207,12 +221,14 @@ export type ApiMethods = {
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    direct_messages_topic_id?: number;
     /** Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername) */
     from_chat_id: number | string;
-    /** New start timestamp for the copied video in the message */
-    video_start_timestamp?: number;
     /** Message identifier in the chat specified in from_chat_id */
     message_id: number;
+    /** New start timestamp for the copied video in the message */
+    video_start_timestamp?: number;
     /** New caption for media, 0-1024 characters after entities parsing. If not specified, the original caption is kept */
     caption?: string;
     /** Mode for parsing entities in the new caption. See formatting options for more details. */
@@ -223,10 +239,12 @@ export type ApiMethods = {
     show_caption_above_media?: boolean;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disable_notification?: boolean;
-    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
-    allow_paid_broadcast?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protect_content?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allow_paid_broadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggested_post_parameters?: SuggestedPostParameters;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
     /** Additional interface options. An object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user. */
@@ -235,14 +253,18 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
+    /** @deprecated Use `reply_parameters` instead. */
+    reply_to_message_id?: number;
   }): MessageId;
 
-  /** Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages,  and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned. */
+  /** Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned. */
   copyMessages(args: {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
+    /** Identifier of the direct messages topic to which the messages will be sent; required if the messages are sent to a direct messages chat */
+    direct_messages_topic_id?: number;
     /** Unique identifier for the chat where the original messages were sent (or channel username in the format @channelusername) */
     from_chat_id: number | string;
     /** A list of 1-100 identifiers of messages in the chat from_chat_id to copy. The identifiers must be specified in a strictly increasing order. */
@@ -263,6 +285,8 @@ export type ApiMethods = {
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    direct_messages_topic_id?: number;
     /** Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo using multipart/form-data. The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20. */
     photo: Buffer | ReadStream | string;
     /** Photo caption (may also be used when resending photos by file_id), 0-1024 characters after entities parsing */
@@ -281,6 +305,8 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allow_paid_broadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggested_post_parameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     message_effect_id?: string;
     /** Description of the message to reply to */
@@ -291,6 +317,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
+    /** @deprecated Use `reply_parameters` instead. */
+    reply_to_message_id?: number;
   }): Message.PhotoMessage;
 
   /** Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
@@ -303,6 +331,8 @@ export type ApiMethods = {
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    direct_messages_topic_id?: number;
     /** Audio file to send. Pass a file_id as String to send an audio file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or upload a new one using multipart/form-data. */
     audio: Buffer | ReadStream | string;
     /** Audio caption, 0-1024 characters after entities parsing */
@@ -325,6 +355,8 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allow_paid_broadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggested_post_parameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     message_effect_id?: string;
     /** Description of the message to reply to */
@@ -335,6 +367,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
+    /** @deprecated Use `reply_parameters` instead. */
+    reply_to_message_id?: number;
   }): Message.AudioMessage;
 
   /** Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future. */
@@ -345,6 +379,8 @@ export type ApiMethods = {
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    direct_messages_topic_id?: number;
     /** File to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. */
     document: Buffer | ReadStream | string;
     /** Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass "attach://<file_attach_name>" if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. */
@@ -363,6 +399,8 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allow_paid_broadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggested_post_parameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     message_effect_id?: string;
     /** Description of the message to reply to */
@@ -373,6 +411,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
+    /** @deprecated Use `reply_parameters` instead. */
+    reply_to_message_id?: number;
   }): Message.DocumentMessage;
 
   /** Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future. */
@@ -383,6 +423,8 @@ export type ApiMethods = {
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    direct_messages_topic_id?: number;
     /** Video to send. Pass a file_id as String to send a video that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new video using multipart/form-data. */
     video: Buffer | ReadStream | string;
     /** Duration of sent video in seconds */
@@ -415,6 +457,8 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allow_paid_broadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggested_post_parameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     message_effect_id?: string;
     /** Description of the message to reply to */
@@ -425,6 +469,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
+    /** @deprecated Use `reply_parameters` instead. */
+    reply_to_message_id?: number;
   }): Message.VideoMessage;
 
   /** Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future. */
@@ -435,6 +481,8 @@ export type ApiMethods = {
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    direct_messages_topic_id?: number;
     /** Animation to send. Pass a file_id as String to send an animation that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an animation from the Internet, or upload a new animation using multipart/form-data. */
     animation: Buffer | ReadStream | string;
     /** Duration of sent animation in seconds */
@@ -461,6 +509,8 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allow_paid_broadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggested_post_parameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     message_effect_id?: string;
     /** Description of the message to reply to */
@@ -471,6 +521,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
+    /** @deprecated Use `reply_parameters` instead. */
+    reply_to_message_id?: number;
   }): Message.AnimationMessage;
 
   /** Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future. */
@@ -481,6 +533,8 @@ export type ApiMethods = {
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    direct_messages_topic_id?: number;
     /** Audio file to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. */
     voice: Buffer | ReadStream | string;
     /** Voice message caption, 0-1024 characters after entities parsing */
@@ -497,6 +551,8 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allow_paid_broadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggested_post_parameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     message_effect_id?: string;
     /** Description of the message to reply to */
@@ -507,6 +563,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
+    /** @deprecated Use `reply_parameters` instead. */
+    reply_to_message_id?: number;
   }): Message.VoiceMessage;
 
   /** Use this method to send video messages. On success, the sent Message is returned.
@@ -518,6 +576,8 @@ export type ApiMethods = {
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    direct_messages_topic_id?: number;
     /** Video note to send. Pass a file_id as String to send a video note that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data.. Sending video notes by a URL is currently unsupported */
     video_note: Buffer | ReadStream | string;
     /** Duration of sent video in seconds */
@@ -532,6 +592,8 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allow_paid_broadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggested_post_parameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     message_effect_id?: string;
     /** Description of the message to reply to */
@@ -542,6 +604,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
+    /** @deprecated Use `reply_parameters` instead. */
+    reply_to_message_id?: number;
   }): Message.VideoNoteMessage;
 
   /** Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Messages that were sent is returned. */
@@ -552,6 +616,8 @@ export type ApiMethods = {
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
+    /** Identifier of the direct messages topic to which the messages will be sent; required if the messages are sent to a direct messages chat */
+    direct_messages_topic_id?: number;
     /** An array describing messages to be sent, must include 2-10 items */
     media: ReadonlyArray<
       InputMediaAudio | InputMediaDocument | InputMediaPhoto | InputMediaVideo
@@ -566,6 +632,8 @@ export type ApiMethods = {
     message_effect_id?: string;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
+    /** @deprecated Use `reply_parameters` instead. */
+    reply_to_message_id?: number;
   }): Array<
     | Message.AudioMessage
     | Message.DocumentMessage
@@ -581,6 +649,8 @@ export type ApiMethods = {
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    direct_messages_topic_id?: number;
     /** Latitude of the location */
     latitude: number;
     /** Longitude of the location */
@@ -599,6 +669,8 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allow_paid_broadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggested_post_parameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     message_effect_id?: string;
     /** Description of the message to reply to */
@@ -609,6 +681,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
+    /** @deprecated Use `reply_parameters` instead. */
+    reply_to_message_id?: number;
   }): Message.LocationMessage;
 
   /** Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. */
@@ -651,12 +725,14 @@ export type ApiMethods = {
     reply_markup?: InlineKeyboardMarkup;
   }): (Update.Edited & Message.LocationMessage) | true;
 
-  /** Use this method to send paid media to channel chats. On success, the sent Message is returned. */
+  /** Use this method to send paid media. On success, the sent Message is returned. */
   sendPaidMedia(args: {
-    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    /** Unique identifier of the business connection on behalf of which the message to be edited was sent */
     business_connection_id?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format `@channelusername`). If the chat is a channel, all Telegram Star proceeds from this media will be credited to the chat's balance. Otherwise, they will be credited to the bot's balance */
+    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername). If the chat is a channel, all Telegram Star proceeds from this media will be credited to the chat's balance. Otherwise, they will be credited to the bot's balance. */
     chat_id: number | string;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    direct_messages_topic_id?: number;
     /** The number of Telegram Stars that must be paid to buy access to the media; 1-2500 */
     star_count: number;
     /** An array describing the media to be sent; up to 10 items */
@@ -673,10 +749,12 @@ export type ApiMethods = {
     show_caption_above_media?: boolean;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disable_notification?: boolean;
-    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
-    allow_paid_broadcast?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
     protect_content?: boolean;
+    /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
+    allow_paid_broadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggested_post_parameters?: SuggestedPostParameters;
     /** Description of the message to reply to */
     reply_parameters?: ReplyParameters;
     /** Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user */
@@ -695,6 +773,8 @@ export type ApiMethods = {
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    direct_messages_topic_id?: number;
     /** Latitude of the venue */
     latitude: number;
     /** Longitude of the venue */
@@ -717,6 +797,8 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allow_paid_broadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggested_post_parameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     message_effect_id?: string;
     /** Description of the message to reply to */
@@ -727,6 +809,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
+    /** @deprecated Use `reply_parameters` instead. */
+    reply_to_message_id?: number;
   }): Message.VenueMessage;
 
   /** Use this method to send phone contacts. On success, the sent Message is returned. */
@@ -737,6 +821,8 @@ export type ApiMethods = {
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    direct_messages_topic_id?: number;
     /** Contact's phone number */
     phone_number: string;
     /** Contact's first name */
@@ -751,6 +837,8 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allow_paid_broadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggested_post_parameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     message_effect_id?: string;
     /** Description of the message to reply to */
@@ -761,13 +849,15 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
+    /** @deprecated Use `reply_parameters` instead. */
+    reply_to_message_id?: number;
   }): Message.ContactMessage;
 
   /** Use this method to send a native poll. On success, the sent Message is returned. */
   sendPoll(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     business_connection_id?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername). Polls can't be sent to channel direct messages chats. */
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
@@ -777,7 +867,7 @@ export type ApiMethods = {
     question_parse_mode?: ParseMode;
     /** A list of special entities that appear in the poll question. It can be specified instead of question_parse_mode */
     question_entities?: MessageEntity[];
-    /** A list of 2-10 answer options */
+    /** A list of 2-12 answer options */
     options: InputPollOption[];
     /** True, if the poll needs to be anonymous, defaults to True */
     is_anonymous?: boolean;
@@ -815,7 +905,43 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
+    /** @deprecated Use `reply_parameters` instead. */
+    reply_to_message_id?: number;
   }): Message.PollMessage;
+
+  /** Use this method to send a checklist on behalf of a connected business account. On success, the sent Message is returned. */
+  sendChecklist(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    business_connection_id: string;
+    /** Unique identifier for the target chat */
+    chat_id: number;
+    /** An object for the checklist to send */
+    checklist: InputChecklist;
+    /** Sends the message silently. Users will receive a notification with no sound. */
+    disable_notification?: boolean;
+    /** Protects the contents of the sent message from forwarding and saving */
+    protect_content?: boolean;
+    /** Unique identifier of the message effect to be added to the message */
+    message_effect_id?: string;
+    /** An object for description of the message to reply to */
+    reply_parameters?: ReplyParameters;
+    /** An object for an inline keyboard */
+    reply_markup?: InlineKeyboardMarkup;
+  }): Message.ChecklistMessage;
+
+  /** Use this method to edit a checklist on behalf of a connected business account. On success, the edited Message is returned. */
+  editMessageChecklist(args: {
+    /** Unique identifier of the business connection on behalf of which the message will be sent */
+    business_connection_id: string;
+    /** Unique identifier for the target chat */
+    chat_id: number;
+    /** Unique identifier for the target message */
+    message_id: number;
+    /** An object for the new checklist */
+    checklist: InputChecklist;
+    /** An object for the new inline keyboard for the message */
+    reply_markup?: InlineKeyboardMarkup;
+  }): Message.ChecklistMessage;
 
   /** Use this method to send an animated emoji that will display a random value. On success, the sent Message is returned. */
   sendDice(args: {
@@ -825,14 +951,25 @@ export type ApiMethods = {
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    direct_messages_topic_id?: number;
     /** Emoji on which the dice throw animation is based. Currently, must be one of "🎲", "🎯", "🏀", "⚽", "🎳", or "🎰". Dice can have values 1-6 for "🎲", "🎯" and "🎳", values 1-5 for "🏀" and "⚽", and values 1-64 for "🎰". Defaults to "🎲" */
-    emoji?: string;
+    emoji?:
+      | (string & Record<never, never>)
+      | "🎲"
+      | "🎯"
+      | "🏀"
+      | "⚽"
+      | "🎳"
+      | "🎰";
     /** Sends the message silently. Users will receive a notification with no sound. */
     disable_notification?: boolean;
     /** Protects the contents of the sent message from forwarding */
     protect_content?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allow_paid_broadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggested_post_parameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     message_effect_id?: string;
     /** Description of the message to reply to */
@@ -843,6 +980,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
+    /** @deprecated Use `reply_parameters` instead. */
+    reply_to_message_id?: number;
   }): Message.DiceMessage;
 
   /** Use this method when you need to tell the user that something is happening on the bot's side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns True on success.
@@ -853,7 +992,7 @@ export type ApiMethods = {
   sendChatAction(args: {
     /** Unique identifier of the business connection on behalf of which the action will be sent */
     business_connection_id?: string;
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). Channel chats and channel direct messages chats aren't supported. */
     chat_id: number | string;
     /** Type of action to broadcast. Choose one, depending on what the user is about to receive: typing for text messages, upload_photo for photos, record_video or upload_video for videos, record_voice or upload_voice for voice notes, upload_document for general files, choose_sticker for stickers, find_location for location data, record_video_note or upload_video_note for video notes. */
     action:
@@ -872,23 +1011,13 @@ export type ApiMethods = {
     message_thread_id?: number;
   }): true;
 
-  /** Marks incoming message as read on behalf of a business account. Requires the can_read_messages business bot right. Returns True on success. */
-  readBusinessMessage(args: {
-    /** Unique identifier of the business connection on behalf of which to read the message */
-    business_connection_id: string;
-    /** Unique identifier of the chat in which the message was received. The chat must have been active in the last 24 hours. */
-    chat_id: number;
-    /** Unique identifier of the message to mark as read */
-    message_id: number;
-  }): true;
-
-  /** Use this method to change the chosen reactions on a message. Service messages of some types can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. In albums, bots must react to the first message. Returns True on success. */
+  /** Use this method to change the chosen reactions on a message. Service messages of some types can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Bots can't use paid reactions. Returns True on success. */
   setMessageReaction(args: {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
     /** Identifier of the target message */
     message_id: number;
-    /** A JSON-serialized list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators. Paid reactions can't be used by bots. */
+    /** A list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators. Paid reactions can't be used by bots. */
     reaction?: ReactionType[];
     /** Pass True to set the reaction with a big animation */
     is_big?: boolean;
@@ -921,9 +1050,6 @@ export type ApiMethods = {
     /** File identifier to get information about */
     file_id: string;
   }): File;
-
-  /** Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
-  kickChatMember: ApiMethods["banChatMember"];
 
   /** Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
   banChatMember(args: {
@@ -969,7 +1095,7 @@ export type ApiMethods = {
     user_id: number;
     /** Pass True if the administrator's presence in the chat is hidden */
     is_anonymous?: boolean;
-    /** Pass True if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege. */
+    /** Pass True if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars. Implied by any other administrator privilege. */
     can_manage_chat?: boolean;
     /** Pass True if the administrator can delete messages of other users */
     can_delete_messages?: boolean;
@@ -989,7 +1115,7 @@ export type ApiMethods = {
     can_edit_stories?: boolean;
     /** True if the administrator can delete stories posted by other users */
     can_delete_stories?: boolean;
-    /** True if the administrator can post messages in the channel, or access channel statistics; for channels only */
+    /** Pass True if the administrator can post messages in the channel, approve suggested posts, or access channel statistics; for channels only */
     can_post_messages?: boolean;
     /** True if the administrator can edit messages of other users and can pin messages; for channels only */
     can_edit_messages?: boolean;
@@ -997,6 +1123,8 @@ export type ApiMethods = {
     can_pin_messages?: boolean;
     /** True if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only */
     can_manage_topics?: boolean;
+    /** Pass True if the administrator can manage direct messages within the channel and decline suggested posts; for channels only */
+    can_manage_direct_messages?: boolean;
   }): true;
 
   /** Use this method to set a custom title for an administrator in a supergroup promoted by the bot. Returns True on success. */
@@ -1079,7 +1207,7 @@ export type ApiMethods = {
     chat_id: number | string;
     /** Invite link name; 0-32 characters */
     name?: string;
-    /** The number of seconds the subscription will be active for before the next payment. Currently, it must always be 2592000 (30 days) */
+    /** The number of seconds the subscription will be active for before the next payment. Currently, it must always be 2592000 (30 days). */
     subscription_period: number;
     /** The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-2500 */
     subscription_price: number;
@@ -1087,7 +1215,7 @@ export type ApiMethods = {
 
   /** Use this method to edit a subscription invite link created by the bot. The bot must have the can_invite_users administrator rights. Returns the edited invite link as a ChatInviteLink object. */
   editChatSubscriptionInviteLink(args: {
-    /** Unique identifier for the target channel chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
     /** The invite link to edit */
     invite_link: string;
@@ -1117,6 +1245,26 @@ export type ApiMethods = {
     chat_id: number | string;
     /** Unique identifier of the target user */
     user_id: number;
+  }): true;
+
+  /** Use this method to approve a suggested post in a direct messages chat. The bot must have the 'can_post_messages' administrator right in the corresponding channel chat. Returns True on success. */
+  approveSuggestedPost(args: {
+    /** Unique identifier for the target direct messages chat */
+    chat_id: number;
+    /** Identifier of a suggested post message to approve */
+    message_id: number;
+    /** Point in time (Unix timestamp) when the post is expected to be published; omit if the date has already been specified when the suggested post was created. If specified, then the date must be not more than 2678400 seconds (30 days) in the future */
+    send_date?: number;
+  }): true;
+
+  /** Use this method to decline a suggested post in a direct messages chat. The bot must have the 'can_manage_direct_messages' administrator right in the corresponding channel chat. Returns True on success. */
+  declineSuggestedPost(args: {
+    /** Unique identifier for the target direct messages chat */
+    chat_id: number;
+    /** Identifier of a suggested post message to decline */
+    message_id: number;
+    /** Comment for the creator of the suggested post; 0-128 characters */
+    comment?: string;
   }): true;
 
   /** Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success. */
@@ -1149,7 +1297,7 @@ export type ApiMethods = {
     description?: string;
   }): true;
 
-  /** Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True on success. */
+  /** Use this method to add a message to the list of pinned messages in a chat. In private chats and channel direct messages chats, all non-service messages can be pinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to pin messages in groups and channels respectively. Returns True on success. */
   pinChatMessage(args: {
     /** Unique identifier of the business connection on behalf of which the message will be pinned */
     business_connection_id?: string;
@@ -1161,7 +1309,7 @@ export type ApiMethods = {
     disable_notification?: boolean;
   }): true;
 
-  /** Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True on success. */
+  /** Use this method to remove a message from the list of pinned messages in a chat. In private chats and channel direct messages chats, all messages can be unpinned. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin messages in groups and channels respectively. Returns True on success. */
   unpinChatMessage(args: {
     /** Unique identifier of the business connection on behalf of which the message will be unpinned */
     business_connection_id?: string;
@@ -1171,7 +1319,7 @@ export type ApiMethods = {
     message_id?: number;
   }): true;
 
-  /** Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the 'can_pin_messages' admin right in a supergroup or 'can_edit_messages' admin right in a channel. Returns True on success. */
+  /** Use this method to clear the list of pinned messages in a chat. In private chats and channel direct messages chats, no additional rights are required to unpin all pinned messages. Conversely, the bot must be an administrator with the 'can_pin_messages' right or the 'can_edit_messages' right to unpin all pinned messages in groups and channels respectively. Returns True on success. */
   unpinAllChatMessages(args: {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
     chat_id: number | string;
@@ -1179,7 +1327,7 @@ export type ApiMethods = {
 
   /** Use this method for your bot to leave a group, supergroup or channel. Returns True on success. */
   leaveChat(args: {
-    /** Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername). Channel direct messages chats aren't supported; leave the corresponding channel instead. */
     chat_id: number | string;
   }): true;
 
@@ -1243,7 +1391,7 @@ export type ApiMethods = {
     icon_custom_emoji_id?: string;
   }): ForumTopic;
 
-  /** Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success. */
+  /** Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success. */
   editForumTopic(args: {
     /** Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername) */
     chat_id: number | string;
@@ -1287,7 +1435,7 @@ export type ApiMethods = {
     message_thread_id: number;
   }): true;
 
-  /** Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights. Returns True on success. */
+  /** Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success. */
   editGeneralForumTopic(args: {
     /** Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername) */
     chat_id: number | string;
@@ -1453,119 +1601,8 @@ export type ApiMethods = {
     for_channels?: boolean;
   }): ChatAdministratorRights;
 
-  /** Changes the first and last name of a managed business account. Requires the can_change_name business bot right. Returns True on success. */
-  setBusinessAccountName(args: {
-    /** Unique identifier of the business connection */
-    business_connection_id: string;
-    /** The new value of the first name for the business account; 1-64 characters */
-    first_name: string;
-    /** The new value of the last name for the business account; 0-64 characters */
-    last_name?: string;
-  }): true;
-
-  /** Changes the username of a managed business account. Requires the can_change_username business bot right. Returns True on success. */
-  setBusinessAccountUsername(args: {
-    /** Unique identifier of the business connection */
-    business_connection_id: string;
-    /** The new value of the username for the business account; 0-32 characters */
-    username?: string;
-  }): true;
-
-  /** Changes the bio of a managed business account. Requires the can_change_bio business bot right. Returns True on success. */
-  setBusinessAccountBio(args: {
-    /** Unique identifier of the business connection */
-    business_connection_id: string;
-    /** The new value of the bio for the business account; 0-140 characters */
-    bio?: string;
-  }): true;
-
-  /** Changes the profile photo of a managed business account. Requires the can_edit_profile_photo business bot right. Returns True on success. */
-  setBusinessAccountProfilePhoto(args: {
-    /** Unique identifier of the business connection */
-    business_connection_id: string;
-    /** The new profile photo to set */
-    photo: InputProfilePhoto;
-    /** Pass True to set the public photo, which will be visible even if the main photo is hidden by the business account's privacy settings. An account can have only one public photo. */
-    is_public?: boolean;
-  }): true;
-
-  /** Removes the current profile photo of a managed business account. Requires the can_edit_profile_photo business bot right. Returns True on success. */
-  removeBusinessAccountProfilePhoto(args: {
-    /** Unique identifier of the business connection */
-    business_connection_id: string;
-    /** Pass True to remove the public photo, which is visible even if the main photo is hidden by the business account's privacy settings. After the main photo is removed, the previous profile photo (if present) becomes the main photo. */
-    is_public?: boolean;
-  }): true;
-
-  /** Changes the privacy settings pertaining to incoming gifts in a managed business account. Requires the can_change_gift_settings business bot right. Returns True on success. */
-  setBusinessAccountGiftSettings(args: {
-    /** Unique identifier of the business connection */
-    business_connection_id: string;
-    /** Pass True, if a button for sending a gift to the user or by the business account must always be shown in the input field */
-    show_gift_button: boolean;
-    /** Types of gifts accepted by the business account */
-    accepted_gift_types: AcceptedGiftTypes;
-  }): true;
-
-  /** Returns the amount of Telegram Stars owned by a managed business account. Requires the can_view_gifts_and_stars business bot right. Returns StarAmount on success. */
-  getBusinessAccountStarBalance(args: {
-    /** Unique identifier of the business connection */
-    business_connection_id: string;
-  }): StarAmount;
-
-  /** Returns the gifts received and owned by a managed business account. Requires the can_view_gifts_and_stars business bot right. Returns OwnedGifts on success. */
-  getBusinessAccountGifts(args: {
-    /** Unique identifier of the business connection */
-    business_connection_id: string;
-    /** Pass True to exclude gifts that aren't saved to the account's profile page */
-    exclude_unsaved?: boolean;
-    /** Pass True to exclude gifts that are saved to the account's profile page */
-    exclude_saved?: boolean;
-    /** Pass True to exclude gifts that can be purchased an unlimited number of times */
-    exclude_unlimited?: boolean;
-    /** Pass True to exclude gifts that can be purchased a limited number of times */
-    exclude_limited?: boolean;
-    /** Pass True to exclude unique gifts */
-    exclude_unique?: boolean;
-    /** Pass True to sort results by gift price instead of send date. Sorting is applied before pagination. */
-    sort_by_price?: boolean;
-    /** Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of results */
-    offset?: string;
-    /** The maximum number of gifts to be returned; 1-100. Defaults to 100 */
-    limit?: number;
-  }): OwnedGifts;
-
-  /** Converts a given regular gift to Telegram Stars. Requires the can_convert_gifts_to_stars business bot right. Returns True on success. */
-  convertGiftToStars(args: {
-    /** Unique identifier of the business connection */
-    business_connection_id: string;
-    /** Unique identifier of the regular gift that should be converted to Telegram Stars */
-    owned_gift_id: string;
-  }): true;
-
-  /** Upgrades a given regular gift to a unique gift. Requires the can_transfer_and_upgrade_gifts business bot right. Additionally requires the can_transfer_stars business bot right if the upgrade is paid. Returns True on success. */
-  upgradeGift(args: {
-    /** Unique identifier of the business connection */
-    business_connection_id: string;
-    /** Unique identifier of the regular gift that should be upgraded to a unique one */
-    owned_gift_id: string;
-    /** Pass True to keep the original gift text, sender and receiver in the upgraded gift */
-    keep_original_details?: boolean;
-    /** The amount of Telegram Stars that will be paid for the upgrade from the business account balance. If gift.prepaid_upgrade_star_count > 0, then pass 0, otherwise, the can_transfer_stars business bot right is required and gift.upgrade_star_count must be passed. */
-    star_count?: number;
-  }): true;
-
-  /** Transfers an owned unique gift to another user. Requires the can_transfer_and_upgrade_gifts business bot right. Requires can_transfer_stars business bot right if the transfer is paid. Returns True on success. */
-  transferGift(args: {
-    /** Unique identifier of the business connection */
-    business_connection_id: string;
-    /** Unique identifier of the regular gift that should be transferred */
-    owned_gift_id: string;
-    /** Unique identifier of the chat which will own the gift. The chat must be active in the last 24 hours. */
-    new_owner_chat_id: number;
-    /** The amount of Telegram Stars that will be paid for the transfer from the business account balance. If positive, then the can_transfer_stars business bot right is required. */
-    star_count: number;
-  }): true;
+  /** A method to get the current Telegram Stars balance of the bot. Requires no parameters. On success, returns a StarAmount object. */
+  getMyStarBalance(): StarAmount;
 
   /** Use this method to edit text and game messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent. */
   editMessageText(args: {
@@ -1661,7 +1698,8 @@ export type ApiMethods = {
   - Bots can delete incoming messages in private chats.
   - Bots granted can_post_messages permissions can delete outgoing messages in channels.
   - If the bot is an administrator of a group, it can delete any message there.
-  - If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there.
+  - If the bot has can_delete_messages administrator right in a supergroup or a channel, it can delete any message there.
+  - If the bot has can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat.
   Returns True on success. */
   deleteMessage(args: {
     /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
@@ -1686,6 +1724,176 @@ export type ApiMethods = {
     message_ids: number[];
   }): true;
 
+  /** Changes the first and last name of a managed business account. Requires the can_change_name business bot right. Returns True on success. */
+  setBusinessAccountName(args: {
+    /** Unique identifier of the business connection */
+    business_connection_id: string;
+    /** The new value of the first name for the business account; 1-64 characters */
+    first_name: string;
+    /** The new value of the last name for the business account; 0-64 characters */
+    last_name?: string;
+  }): true;
+
+  /** Changes the username of a managed business account. Requires the can_change_username business bot right. Returns True on success. */
+  setBusinessAccountUsername(args: {
+    /** Unique identifier of the business connection */
+    business_connection_id: string;
+    /** The new value of the username for the business account; 0-32 characters */
+    username?: string;
+  }): true;
+
+  /** Changes the bio of a managed business account. Requires the can_change_bio business bot right. Returns True on success. */
+  setBusinessAccountBio(args: {
+    /** Unique identifier of the business connection */
+    business_connection_id: string;
+    /** The new value of the bio for the business account; 0-140 characters */
+    bio?: string;
+  }): true;
+
+  /** Changes the profile photo of a managed business account. Requires the can_edit_profile_photo business bot right. Returns True on success. */
+  setBusinessAccountProfilePhoto(args: {
+    /** Unique identifier of the business connection */
+    business_connection_id: string;
+    /** The new profile photo to set */
+    photo: InputProfilePhoto;
+    /** Pass True to set the public photo, which will be visible even if the main photo is hidden by the business account's privacy settings. An account can have only one public photo. */
+    is_public?: boolean;
+  }): true;
+
+  /** Removes the current profile photo of a managed business account. Requires the can_edit_profile_photo business bot right. Returns True on success. */
+  removeBusinessAccountProfilePhoto(args: {
+    /** Unique identifier of the business connection */
+    business_connection_id: string;
+    /** Pass True to remove the public photo, which is visible even if the main photo is hidden by the business account's privacy settings. After the main photo is removed, the previous profile photo (if present) becomes the main photo. */
+    is_public?: boolean;
+  }): true;
+
+  /** Changes the privacy settings pertaining to incoming gifts in a managed business account. Requires the can_change_gift_settings business bot right. Returns True on success. */
+  setBusinessAccountGiftSettings(args: {
+    /** Unique identifier of the business connection */
+    business_connection_id: string;
+    /** Pass True, if a button for sending a gift to the user or by the business account must always be shown in the input field */
+    show_gift_button: boolean;
+    /** Types of gifts accepted by the business account */
+    accepted_gift_types: AcceptedGiftTypes;
+  }): true;
+
+  /** Returns the amount of Telegram Stars owned by a managed business account. Requires the can_view_gifts_and_stars business bot right. Returns StarAmount on success. */
+  getBusinessAccountStarBalance(args: {
+    /** Unique identifier of the business connection */
+    business_connection_id: string;
+  }): StarAmount;
+
+  /** Transfers Telegram Stars from the business account balance to the bot's balance. Requires the can_transfer_stars business bot right. Returns True on success. */
+  transferBusinessAccountStars(args: {
+    /** Unique identifier of the business connection */
+    business_connection_id: string;
+    /** Number of Telegram Stars to transfer; 1-10000 */
+    star_count: number;
+  }): true;
+
+  /** Returns the gifts received and owned by a managed business account. Requires the can_view_gifts_and_stars business bot right. Returns OwnedGifts on success. */
+  getBusinessAccountGifts(args: {
+    /** Unique identifier of the business connection */
+    business_connection_id: string;
+    /** Pass True to exclude gifts that aren't saved to the account's profile page */
+    exclude_unsaved?: boolean;
+    /** Pass True to exclude gifts that are saved to the account's profile page */
+    exclude_saved?: boolean;
+    /** Pass True to exclude gifts that can be purchased an unlimited number of times */
+    exclude_unlimited?: boolean;
+    /** Pass True to exclude gifts that can be purchased a limited number of times */
+    exclude_limited?: boolean;
+    /** Pass True to exclude unique gifts */
+    exclude_unique?: boolean;
+    /** Pass True to sort results by gift price instead of send date. Sorting is applied before pagination. */
+    sort_by_price?: boolean;
+    /** Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of results */
+    offset?: string;
+    /** The maximum number of gifts to be returned; 1-100. Defaults to 100 */
+    limit?: number;
+  }): OwnedGifts;
+
+  /** Converts a given regular gift to Telegram Stars. Requires the can_convert_gifts_to_stars business bot right. Returns True on success. */
+  convertGiftToStars(args: {
+    /** Unique identifier of the business connection */
+    business_connection_id: string;
+    /** Unique identifier of the regular gift that should be converted to Telegram Stars */
+    owned_gift_id: string;
+  }): true;
+
+  /** Upgrades a given regular gift to a unique gift. Requires the can_transfer_and_upgrade_gifts business bot right. Additionally requires the can_transfer_stars business bot right if the upgrade is paid. Returns True on success. */
+  upgradeGift(args: {
+    /** Unique identifier of the business connection */
+    business_connection_id: string;
+    /** Unique identifier of the regular gift that should be upgraded to a unique one */
+    owned_gift_id: string;
+    /** Pass True to keep the original gift text, sender and receiver in the upgraded gift */
+    keep_original_details?: boolean;
+    /** The amount of Telegram Stars that will be paid for the upgrade from the business account balance. If gift.prepaid_upgrade_star_count > 0, then pass 0, otherwise, the can_transfer_stars business bot right is required and gift.upgrade_star_count must be passed. */
+    star_count?: number;
+  }): true;
+
+  /** Transfers an owned unique gift to another user. Requires the can_transfer_and_upgrade_gifts business bot right. Requires can_transfer_stars business bot right if the transfer is paid. Returns True on success. */
+  transferGift(args: {
+    /** Unique identifier of the business connection */
+    business_connection_id: string;
+    /** Unique identifier of the regular gift that should be transferred */
+    owned_gift_id: string;
+    /** Unique identifier of the chat which will own the gift. The chat must be active in the last 24 hours. */
+    new_owner_chat_id: number;
+    /** The amount of Telegram Stars that will be paid for the transfer from the business account balance. If positive, then the can_transfer_stars business bot right is required. */
+    star_count: number;
+  }): true;
+
+  /** Posts a story on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns Story on success. */
+  postStory(args: {
+    /** Unique identifier of the business connection */
+    business_connection_id: string;
+    /** Content of the story */
+    content: InputStoryContent;
+    /** Period after which the story is moved to the archive, in seconds; must be one of 6 * 3600, 12 * 3600, 86400, or 2 * 86400 */
+    active_period: number;
+    /** Caption of the story, 0-2048 characters after entities parsing */
+    caption?: string;
+    /** Mode for parsing entities in the story caption. See formatting options for more details. */
+    parse_mode?: ParseMode;
+    /** A list of special entities that appear in the caption, which can be specified instead of parse_mode */
+    caption_entities?: MessageEntity[];
+    /** A list of clickable areas to be shown on the story */
+    areas?: StoryArea[];
+    /** Pass True to keep the story accessible after it expires */
+    post_to_chat_page?: boolean;
+    /** Pass True if the content of the story must be protected from forwarding and screenshotting */
+    protect_content?: boolean;
+  }): Story;
+
+  /** Edits a story previously posted by the bot on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns Story on success. */
+  editStory(args: {
+    /** Unique identifier of the business connection */
+    business_connection_id: string;
+    /** Unique identifier of the story to edit */
+    story_id: number;
+    /** Content of the story */
+    content: InputStoryContent;
+    /** Caption of the story, 0-2048 characters after entities parsing */
+    caption?: string;
+    /** Mode for parsing entities in the story caption. See formatting options for more details. */
+    parse_mode?: ParseMode;
+    /** A list of special entities that appear in the caption, which can be specified instead of parse_mode */
+    caption_entities?: MessageEntity[];
+    /** A list of clickable areas to be shown on the story */
+    areas?: StoryArea;
+  }): Story;
+
+  /** Deletes a story previously posted by the bot on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns True on success. */
+  deleteStory(args: {
+    /** Unique identifier of the business connection */
+    business_connection_id: string;
+    /** Unique identifier of the story to delete */
+    story_id: number;
+  }): true;
+
   /** Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned. */
   sendSticker(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
@@ -1694,6 +1902,8 @@ export type ApiMethods = {
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    direct_messages_topic_id?: number;
     /** Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload a new .WEBP, .TGS, or .WEBM sticker using multipart/form-data. Video and animated stickers can't be sent via an HTTP URL. */
     sticker: Buffer | ReadStream | string;
     /** Emoji associated with the sticker; only for just uploaded stickers */
@@ -1704,6 +1914,8 @@ export type ApiMethods = {
     protect_content?: boolean;
     /** Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance */
     allow_paid_broadcast?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggested_post_parameters?: SuggestedPostParameters;
     /** Unique identifier of the message effect to be added to the message; for private chats only */
     message_effect_id?: string;
     /** Description of the message to reply to */
@@ -1714,6 +1926,8 @@ export type ApiMethods = {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
+    /** @deprecated Use `reply_parameters` instead. */
+    reply_to_message_id?: number;
   }): Message.StickerMessage;
 
   /** Use this method to get a sticker set. On success, a StickerSet object is returned. */
@@ -1848,55 +2062,7 @@ export type ApiMethods = {
     custom_emoji_id?: string;
   }): true;
 
-  /** Posts a story on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns Story on success. */
-  postStory(args: {
-    /** Unique identifier of the business connection */
-    business_connection_id: string;
-    /** Content of the story */
-    content: InputStoryContent;
-    /** Period after which the story is moved to the archive, in seconds; must be one of 6 * 3600, 12 * 3600, 86400, or 2 * 86400 */
-    active_period: number;
-    /** Caption of the story, 0-2048 characters after entities parsing */
-    caption?: string;
-    /** Mode for parsing entities in the story caption. See formatting options for more details. */
-    parse_mode?: ParseMode;
-    /** A list of special entities that appear in the caption, which can be specified instead of parse_mode */
-    caption_entities?: MessageEntity[];
-    /** A list of clickable areas to be shown on the story */
-    areas?: StoryArea[];
-    /** Pass True to keep the story accessible after it expires */
-    post_to_chat_page?: boolean;
-    /** Pass True if the content of the story must be protected from forwarding and screenshotting */
-    protect_content?: boolean;
-  }): Story;
-
-  /** Edits a story previously posted by the bot on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns Story on success. */
-  editStory(args: {
-    /** Unique identifier of the business connection */
-    business_connection_id: string;
-    /** Unique identifier of the story to edit */
-    story_id: number;
-    /** Content of the story */
-    content: InputStoryContent;
-    /** Caption of the story, 0-2048 characters after entities parsing */
-    caption?: string;
-    /** Mode for parsing entities in the story caption. See formatting options for more details. */
-    parse_mode?: ParseMode;
-    /** A list of special entities that appear in the caption, which can be specified instead of parse_mode */
-    caption_entities?: MessageEntity[];
-    /** A list of clickable areas to be shown on the story */
-    areas?: StoryArea;
-  }): Story;
-
-  /** Deletes a story previously posted by the bot on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns True on success. */
-  deleteStory(args: {
-    /** Unique identifier of the business connection */
-    business_connection_id: string;
-    /** Unique identifier of the story to delete */
-    story_id: number;
-  }): true;
-
-  /** Returns the list of gifts that can be sent by the bot to users and chennel chats. Requires no parameters. Returns a Gifts object. */
+  /** Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters. Returns a Gifts object. */
   getAvailableGifts(): Gifts;
 
   /** Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars by the receiver. Returns True on success. */
@@ -1909,13 +2075,13 @@ export type ApiMethods = {
     gift_id: string;
     /** Pass True to pay for the gift upgrade from the bot's balance, thereby making the upgrade free for the receiver */
     pay_for_upgrade?: boolean;
-    /** Text that will be shown along with the gift; 0-255 characters */
+    /** Text that will be shown along with the gift; 0-128 characters */
     text?: string;
     /** Mode for parsing entities in the text. See formatting options for more details. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored. */
     text_parse_mode?: ParseMode;
     /** A list of special entities that appear in the gift text. It can be specified instead of text_parse_mode. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored. */
     text_entities?: MessageEntity[];
-  }): true;
+  }): Gifts;
 
   /** Gifts a Telegram Premium subscription to the given user. Returns True on success. */
   giftPremiumSubscription(args: {
@@ -1931,14 +2097,6 @@ export type ApiMethods = {
     text_parse_mode?: ParseMode;
     /** A list of special entities that appear in the gift text. It can be specified instead of text_parse_mode. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored. */
     text_entities?: MessageEntity[];
-  }): true;
-
-  /** Transfers Telegram Stars from the business account balance to the bot's balance. Requires the can_transfer_stars business bot right. Returns True on success. */
-  transferBusinessAccountStars(args: {
-    /** Unique identifier of the business connection */
-    business_connection_id: string;
-    /** Number of Telegram Stars to transfer; 1-10000 */
-    star_count: number;
   }): true;
 
   /** Use this method to send answers to an inline query. On success, True is returned.
@@ -1990,11 +2148,13 @@ export type ApiMethods = {
     chat_id: number | string;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
+    /** Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat */
+    direct_messages_topic_id?: number;
     /** Product name, 1-32 characters */
     title: string;
     /** Product description, 1-255 characters */
     description: string;
-    /** Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes. */
+    /** Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes. */
     payload: string;
     /** Payment provider token, obtained via BotFather. Pass an empty string for payments in Telegram Stars. */
     provider_token?: string;
@@ -2032,6 +2192,8 @@ export type ApiMethods = {
     send_email_to_provider?: boolean;
     /** Pass True if the final price depends on the shipping method. Ignored for payments in Telegram Stars. */
     is_flexible?: boolean;
+    /** An object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined. */
+    suggested_post_parameters?: SuggestedPostParameters;
     /** Sends the message silently. Users will receive a notification with no sound. */
     disable_notification?: boolean;
     /** Protects the contents of the sent message from forwarding and saving */
@@ -2044,6 +2206,8 @@ export type ApiMethods = {
     reply_parameters?: ReplyParameters;
     /** An object for an inline keyboard. If empty, one 'Pay total price' button will be shown. If not empty, the first button must be a Pay button. */
     reply_markup?: InlineKeyboardMarkup;
+    /** @deprecated Use `reply_parameters` instead. */
+    reply_to_message_id?: number;
   }): Message.InvoiceMessage;
 
   /** Use this method to create a link for an invoice. Returns the created invoice link as String on success. */
@@ -2054,7 +2218,7 @@ export type ApiMethods = {
     title: string;
     /** Product description, 1-255 characters */
     description: string;
-    /** Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes. */
+    /** Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes. */
     payload: string;
     /** Payment provider token, obtained via @BotFather. Pass an empty string for payments in Telegram Stars. */
     provider_token?: string;
@@ -2094,6 +2258,44 @@ export type ApiMethods = {
     is_flexible?: boolean;
   }): string;
 
+  /** If you sent an invoice requesting a shipping address and the parameter is_flexible was specified, the Bot API will send an Update with a shipping_query field to the bot. Use this method to reply to shipping queries. On success, True is returned. */
+  answerShippingQuery(args: {
+    /** Unique identifier for the query to be answered */
+    shipping_query_id: string;
+    /** Pass True if delivery to the specified address is possible and False if there are any problems (for example, if delivery to the specified address is not possible) */
+    ok: boolean;
+    /** Required if ok is True. An array of available shipping options. */
+    shipping_options?: readonly ShippingOption[];
+    /** Required if ok is False. Error message in human readable form that explains why it is impossible to complete the order (e.g. “Sorry, delivery to your desired address is unavailable”). Telegram will display this message to the user. */
+    error_message?: string;
+  }): true;
+
+  /** Once the user has confirmed their payment and shipping details, the Bot API sends the final confirmation in the form of an Update with the field pre_checkout_query. Use this method to respond to such pre-checkout queries. On success, True is returned. Note: The Bot API must receive an answer within 10 seconds after the pre-checkout query was sent. */
+  answerPreCheckoutQuery(args: {
+    /** Unique identifier for the query to be answered */
+    pre_checkout_query_id: string;
+    /** Specify True if everything is alright (goods are available, etc.) and the bot is ready to proceed with the order. Use False if there are any problems. */
+    ok: boolean;
+    /** Required if ok is False. Error message in human readable form that explains the reason for failure to proceed with the checkout (e.g. "Sorry, somebody just bought the last of our amazing black T-shirts while you were busy filling out your payment details. Please choose a different color or garment!"). Telegram will display this message to the user. */
+    error_message?: string;
+  }): true;
+
+  /** Returns the bot's Telegram Star transactions in chronological order. On success, returns a StarTransactions object. */
+  getStarTransactions(args: {
+    /** Number of transactions to skip in the response */
+    offset?: number;
+    /** The maximum number of transactions to be retrieved. Values between 1-100 are accepted. Defaults to 100. */
+    limit?: number;
+  }): StarTransactions;
+
+  /** Refunds a successful payment in Telegram Stars. Returns True on success. */
+  refundStarPayment(args: {
+    /** Identifier of the user whose payment will be refunded */
+    user_id: number;
+    /** Telegram payment identifier */
+    telegram_payment_charge_id: string;
+  }): true;
+
   /** Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars. Returns True on success. */
   editUserStarSubscription(args: {
     /** Identifier of the user whose subscription will be edited */
@@ -2114,7 +2316,7 @@ export type ApiMethods = {
 
   /** Verifies a chat on behalf of the organization which is represented by the bot. Returns True on success. */
   verifyChat(args: {
-    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername) */
+    /** Unique identifier for the target chat or username of the target channel (in the format @channelusername). Channel direct messages chats can't be verified. */
     chat_id: number | string;
     /** Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description. */
     custom_description?: string;
@@ -2132,43 +2334,15 @@ export type ApiMethods = {
     chat_id: number | string;
   }): true;
 
-  /** If you sent an invoice requesting a shipping address and the parameter is_flexible was specified, the Bot API will send an Update with a shipping_query field to the bot. Use this method to reply to shipping queries. On success, True is returned. */
-  answerShippingQuery(args: {
-    /** Unique identifier for the query to be answered */
-    shipping_query_id: string;
-    /** Pass True if delivery to the specified address is possible and False if there are any problems (for example, if delivery to the specified address is not possible) */
-    ok: boolean;
-    /** Required if ok is True. An array of available shipping options. */
-    shipping_options?: readonly ShippingOption[];
-    /** Required if ok is False. Error message in human readable form that explains why it is impossible to complete the order (e.g. "Sorry, delivery to your desired address is unavailable"). Telegram will display this message to the user. */
-    error_message?: string;
+  /** Marks incoming message as read on behalf of a business account. Requires the can_read_messages business bot right. Returns True on success. */
+  readBusinessMessage(args: {
+    /** Unique identifier of the business connection on behalf of which to read the message */
+    business_connection_id: string;
+    /** Unique identifier of the chat in which the message was received. The chat must have been active in the last 24 hours. */
+    chat_id: number;
+    /** Unique identifier of the message to mark as read */
+    message_id: number;
   }): true;
-
-  /** Once the user has confirmed their payment and shipping details, the Bot API sends the final confirmation in the form of an Update with the field pre_checkout_query. Use this method to respond to such pre-checkout queries. On success, True is returned. Note: The Bot API must receive an answer within 10 seconds after the pre-checkout query was sent. */
-  answerPreCheckoutQuery(args: {
-    /** Unique identifier for the query to be answered */
-    pre_checkout_query_id: string;
-    /** Specify True if everything is alright (goods are available, etc.) and the bot is ready to proceed with the order. Use False if there are any problems. */
-    ok: boolean;
-    /** Required if ok is False. Error message in human readable form that explains the reason for failure to proceed with the checkout (e.g. "Sorry, somebody just bought the last of our amazing black T-shirts while you were busy filling out your payment details. Please choose a different color or garment!"). Telegram will display this message to the user. */
-    error_message?: string;
-  }): true;
-
-  /** Refunds a successful payment in Telegram Stars. Returns True on success. */
-  refundStarPayment(args: {
-    /** Identifier of the user whose payment will be refunded */
-    user_id: number;
-    /** Telegram payment identifier */
-    telegram_payment_charge_id: string;
-  }): true;
-
-  /** Returns the bot's Telegram Star transactions in chronological order. On success, returns a StarTransactions object. */
-  getStarTransactions(args: {
-    /** Number of transactions to skip in the response */
-    offset?: number;
-    /** The maximum number of transactions to be retrieved. Values between 1-100 are accepted. Defaults to 100. */
-    limit?: number;
-  }): StarTransactions;
 
   /** Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change). Returns True on success.
 
@@ -2184,7 +2358,7 @@ export type ApiMethods = {
   sendGame(args: {
     /** Unique identifier of the business connection on behalf of which the message will be sent */
     business_connection_id?: string;
-    /** Unique identifier for the target chat */
+    /** Unique identifier for the target chat. Games can't be sent to channel direct messages chats and channel chats. */
     chat_id: number;
     /** Unique identifier for the target message thread (topic) of the forum; for forum supergroups only */
     message_thread_id?: number;
@@ -2202,6 +2376,8 @@ export type ApiMethods = {
     reply_parameters?: ReplyParameters;
     /** An object for an inline keyboard. If empty, one 'Play game_title' button will be shown. If not empty, the first button must launch the game. */
     reply_markup?: InlineKeyboardMarkup;
+    /** @deprecated Use `reply_parameters` instead. */
+    reply_to_message_id?: number;
   }): Message.GameMessage;
 
   /** Use this method to set the score of the specified user in a game message. On success, if the message is not an inline message, the Message is returned, otherwise True is returned. Returns an error, if the new score is not greater than the user's current score in the chat and force is False. */

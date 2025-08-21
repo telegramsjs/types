@@ -95,6 +95,8 @@ export declare namespace Chat {
     last_name?: string;
     /** True, if the supergroup chat is a forum (has topics enabled) */
     is_forum?: undefined;
+    /** True, if the chat is the direct messages chat of a channel */
+    is_direct_messages?: undefined;
   }
   /** Internal type for group chats */
   export interface GroupChat {
@@ -112,6 +114,8 @@ export declare namespace Chat {
     last_name?: undefined;
     /** True, if the supergroup chat is a forum (has topics enabled) */
     is_forum?: undefined;
+    /** True, if the chat is the direct messages chat of a channel */
+    is_direct_messages?: undefined;
   }
   /** Internal type for supergroup chats */
   export interface SupergroupChat {
@@ -129,6 +133,8 @@ export declare namespace Chat {
     last_name?: undefined;
     /** True, if the supergroup chat is a forum (has topics enabled) */
     is_forum?: true;
+    /** True, if the chat is the direct messages chat of a channel */
+    is_direct_messages?: true;
   }
   /** Internal type for channel chats */
   export interface ChannelChat {
@@ -146,6 +152,8 @@ export declare namespace Chat {
     last_name?: undefined;
     /** True, if the supergroup chat is a forum (has topics enabled) */
     is_forum?: undefined;
+    /** True, if the chat is the direct messages chat of a channel */
+    is_direct_messages?: undefined;
   }
 }
 
@@ -245,6 +253,8 @@ export declare namespace ChatFullInfo {
     custom_emoji_sticker_set_name?: undefined;
     /** Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. */
     linked_chat_id?: undefined;
+    /** Information about the corresponding channel chat; for direct messages chats only */
+    parent_chat?: undefined;
     /** For supergroups, the location to which the supergroup is connected */
     location?: undefined;
     /** True, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats. */
@@ -338,6 +348,8 @@ export declare namespace ChatFullInfo {
     custom_emoji_sticker_set_name?: undefined;
     /** Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. */
     linked_chat_id?: undefined;
+    /** Information about the corresponding channel chat; for direct messages chats only */
+    parent_chat?: undefined;
     /** For supergroups, the location to which the supergroup is connected */
     location?: undefined;
     /** True, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats. */
@@ -431,6 +443,8 @@ export declare namespace ChatFullInfo {
     custom_emoji_sticker_set_name?: string;
     /** Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. */
     linked_chat_id?: number;
+    /** Information about the corresponding channel chat; for direct messages chats only */
+    parent_chat?: Chat.ChannelChat;
     /** For supergroups, the location to which the supergroup is connected */
     location?: ChatLocation;
     /** True, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats. */
@@ -524,6 +538,8 @@ export declare namespace ChatFullInfo {
     custom_emoji_sticker_set_name?: undefined;
     /** Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. */
     linked_chat_id?: number;
+    /** Information about the corresponding channel chat; for direct messages chats only */
+    parent_chat?: undefined;
     /** For supergroups, the location to which the supergroup is connected */
     location?: undefined;
     /** True, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats. */
@@ -590,7 +606,7 @@ export interface ChatInviteLink {
 export interface ChatAdministratorRights {
   /** True, if the user's presence in the chat is hidden */
   is_anonymous: boolean;
-  /** True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege. */
+  /** True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars. Implied by any other administrator privilege. */
   can_manage_chat: boolean;
   /** True, if the administrator can delete messages of other users */
   can_delete_messages: boolean;
@@ -610,7 +626,7 @@ export interface ChatAdministratorRights {
   can_edit_stories: boolean;
   /** True, if the administrator can delete stories posted by other users */
   can_delete_stories: boolean;
-  /** True, if the administrator can post messages in the channel, or access channel statistics; for channels only */
+  /** True, if the administrator can post messages in the channel, approve suggested posts, or access channel statistics; for channels only */
   can_post_messages?: boolean;
   /** True, if the administrator can edit messages of other users and can pin messages; for channels only */
   can_edit_messages?: boolean;
@@ -618,6 +634,8 @@ export interface ChatAdministratorRights {
   can_pin_messages?: boolean;
   /** True, if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only */
   can_manage_topics?: boolean;
+  /** True, if the administrator can manage direct messages of the channel and decline suggested posts; for channels only */
+  can_manage_direct_messages?: boolean;
 }
 
 /** This object represents changes in the status of a chat member. */
@@ -677,7 +695,7 @@ export interface ChatMemberAdministrator {
   can_be_edited: boolean;
   /** True, if the user's presence in the chat is hidden */
   is_anonymous: boolean;
-  /** True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege. */
+  /** True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars. Implied by any other administrator privilege. */
   can_manage_chat: boolean;
   /** True, if the administrator can delete messages of other users */
   can_delete_messages: boolean;
@@ -697,7 +715,7 @@ export interface ChatMemberAdministrator {
   can_edit_stories: boolean;
   /** True, if the administrator can delete stories posted by other users */
   can_delete_stories: boolean;
-  /** True, if the administrator can post messages in the channel, or access channel statistics; for channels only */
+  /** True, if the administrator can post messages in the channel, approve suggested posts, or access channel statistics; for channels only */
   can_post_messages?: boolean;
   /** True, if the administrator can edit messages of other users and can pin messages; for channels only */
   can_edit_messages?: boolean;
@@ -705,6 +723,8 @@ export interface ChatMemberAdministrator {
   can_pin_messages?: boolean;
   /** True, if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only */
   can_manage_topics?: boolean;
+  /** True, if the administrator can manage direct messages of the channel and decline suggested posts; for channels only */
+  can_manage_direct_messages?: boolean;
   /** Custom title for this user */
   custom_title?: string;
 }
@@ -741,7 +761,7 @@ export interface ChatMemberRestricted {
   can_send_video_notes: boolean;
   /** True, if the user is allowed to send voice notes */
   can_send_voice_notes: boolean;
-  /** True, if the user is allowed to send polls */
+  /** True, if the user is allowed to send polls and checklists */
   can_send_polls: boolean;
   /** True, if the user is allowed to send animations, games, stickers and use inline bots */
   can_send_other_messages: boolean;
@@ -809,7 +829,7 @@ export interface ChatPermissions {
   can_send_video_notes?: boolean;
   /** True, if the user is allowed to send voice notes */
   can_send_voice_notes?: boolean;
-  /** True, if the user is allowed to send polls */
+  /** True, if the user is allowed to send polls and checklists */
   can_send_polls?: boolean;
   /** True, if the user is allowed to send animations, games, stickers and use inline bots */
   can_send_other_messages?: boolean;

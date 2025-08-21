@@ -2,11 +2,23 @@ import type { Chat, User } from "./manageTypes";
 import type { InlineKeyboardMarkup } from "./markupTypes";
 import type { PassportData } from "./passportTypes";
 import type {
+  Checklist,
+  ChecklistTasksAdded,
+  ChecklistTasksDone,
+} from "./checkListTask";
+import type {
   GiftInfo,
   Invoice,
   PaidMessagePriceChanged,
   RefundedPayment,
   SuccessfulPayment,
+  SuggestedPostApprovalFailed,
+  SuggestedPostApproved,
+  SuggestedPostDeclined,
+  SuggestedPostInfo,
+  SuggestedPostPaid,
+  SuggestedPostPrice,
+  SuggestedPostRefunded,
   UniqueGiftInfo,
 } from "./invoiceTypes";
 
@@ -30,6 +42,8 @@ export declare namespace Message {
     chat: Chat;
     /** True, if the message is sent to a forum topic */
     is_topic_message?: boolean;
+    /** Information about the direct messages chat topic that contains the message */
+    direct_messages_topic?: DirectMessagesTopic;
   }
   export interface CommonMessage extends ServiceMessage {
     /** If the sender of the message boosted the chat, the number of boosts added by the user */
@@ -42,6 +56,10 @@ export declare namespace Message {
     is_automatic_forward?: true;
     /** For replies in the same chat and message thread, the original message. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply. */
     reply_to_message?: ReplyMessage;
+    /** Identifier of the specific checklist task that is being replied to */
+    reply_to_checklist_task_id?: number;
+    /** True, if the message is a paid post. Note that such posts must not be deleted for 24 hours to receive the payment and can't be edited. */
+    is_paid_post?: true;
     /** Information about the message that is being replied to, which may come from another chat or forum topic */
     external_reply?: ExternalReplyInfo;
     /** For replies that quote part of the original message, the quoted part of the message */
@@ -99,6 +117,25 @@ export declare namespace Message {
   export type LocationMessage = CommonMessage & MsgWith<"location">;
   export type PaidMediaMessage = CommonMessage & MsgWith<"paid_media">;
   export type VenueMessage = LocationMessage & MsgWith<"venue">;
+  export type DirectMessagePriceChangedMessage = ServiceMessage &
+    MsgWith<"direct_message_price_changed">;
+  export type ChecklistMessage = CommonMessage & MsgWith<"checklist">;
+  export type ChecklistTasksDoneMessage = ServiceMessage &
+    MsgWith<"checklist_tasks_done">;
+  export type ChecklistTasksAddedMessage = ServiceMessage &
+    MsgWith<"checklist_tasks_added">;
+  export type SuggestedPostInfoMessage = ServiceMessage &
+    MsgWith<"suggested_post_info">;
+  export type SuggestedPostApprovedMessage = ServiceMessage &
+    MsgWith<"suggested_post_approved">;
+  export type SuggestedPostApprovalFailedMessage = ServiceMessage &
+    MsgWith<"suggested_post_approval_failed">;
+  export type SuggestedPostDeclinedMessage = ServiceMessage &
+    MsgWith<"suggested_post_declined">;
+  export type SuggestedPostPaidMessage = ServiceMessage &
+    MsgWith<"suggested_post_paid">;
+  export type SuggestedPostRefundedMessage = ServiceMessage &
+    MsgWith<"suggested_post_refunded">;
   export type NewChatMembersMessage = ServiceMessage &
     MsgWith<"new_chat_members">;
   export type LeftChatMemberMessage = ServiceMessage &
@@ -210,6 +247,24 @@ export interface Message extends Message.MediaMessage {
   location?: Location;
   /** Message contains paid media; information about the paid media */
   paid_media?: PaidMediaInfo;
+  /** Message is a checklist */
+  checklist?: Checklist;
+  /** Service message: some tasks in a checklist were marked as done or not done */
+  checklist_tasks_done?: ChecklistTasksDone;
+  /** Service message: tasks were added to a checklist */
+  checklist_tasks_added?: ChecklistTasksAdded;
+  /** Information about suggested post parameters if the message is a suggested post in a channel direct messages chat. If the message is an approved or declined suggested post, then it can't be edited. */
+  suggested_post_info?: SuggestedPostInfo;
+  /** Service message: a suggested post was approved */
+  suggested_post_approved?: SuggestedPostApproved;
+  /** Service message: approval of a suggested post has failed */
+  suggested_post_approval_failed?: SuggestedPostApprovalFailed;
+  /** Service message: a suggested post was declined */
+  suggested_post_declined?: SuggestedPostDeclined;
+  /** Service message: payment for a suggested post was received */
+  suggested_post_paid?: SuggestedPostPaid;
+  /** Service message: payment for a suggested post was refunded */
+  suggested_post_refunded?: SuggestedPostRefunded;
   /** New members that were added to the group or supergroup and information about them (the bot itself may be one of these members) */
   new_chat_members?: User[];
   /** A member was removed from the group, information about them (this member may be the bot itself) */
@@ -282,6 +337,8 @@ export interface Message extends Message.MediaMessage {
   unique_gift?: UniqueGiftInfo;
   /** Service message: the price for paid messages has changed in the chat */
   paid_message_price_changed?: PaidMessagePriceChanged;
+  /** Service message: the price for paid messages in the corresponding direct messages chat of a channel has changed */
+  direct_message_price_changed?: DirectMessagePriceChanged;
   /** Service message: video chat scheduled */
   video_chat_scheduled?: VideoChatScheduled;
   /** Service message: video chat started */
@@ -560,6 +617,8 @@ export interface ExternalReplyInfo {
   paid_media?: PaidMediaInfo;
   /** Message is a native poll, information about the poll */
   poll?: Poll;
+  /** Message is a checklist */
+  checklist?: Checklist;
   /** Message is a venue, information about the venue */
   venue?: Venue;
 }
@@ -568,8 +627,10 @@ export interface ExternalReplyInfo {
 export interface ReplyParameters {
   /** Identifier of the message that will be replied to in the current chat, or in the chat chat_id if it is specified */
   message_id: number;
-  /** If the message to be replied to is from a different chat, unique identifier for the chat or username of the channel (in the format @channelusername). Not supported for messages sent on behalf of a business account. */
+  /** If the message to be replied to is from a different chat, unique identifier for the chat or username of the channel (in the format @channelusername). Not supported for messages sent on behalf of a business account and messages from channel direct messages chats. */
   chat_id?: number | string;
+  /** Identifier of the specific checklist task to be replied to */
+  checklist_task_id?: number;
   /** Pass True if the message should be sent even if the specified message to be replied to is not found; can be used only for replies in the same chat and forum topic. Always True for messages sent on behalf of a business account. */
   allow_sending_without_reply?: boolean;
   /** Quoted part of the message to be replied to; 0-1024 characters after entities parsing. The quote must be an exact substring of the message to be replied to, including bold, italic, underline, strikethrough, spoiler, and custom_emoji entities. The message will fail to send if the quote isn't found in the original message. */
@@ -1140,6 +1201,14 @@ export interface WriteAccessAllowed {
   from_attachment_menu?: boolean;
 }
 
+/** Describes a service message about a change in the price of direct messages sent to a channel chat. */
+export interface DirectMessagePriceChanged {
+  /** True, if direct messages are enabled for the channel chat; false otherwise */
+  are_direct_messages_enabled: boolean;
+  /** The new number of Telegram Stars that must be paid by users for each direct message sent to the channel. Defaults to 0. */
+  direct_message_star_count?: number;
+}
+
 /** This object represents a service message about a video chat scheduled in the chat. */
 export interface VideoChatScheduled {
   /** Point in time (Unix timestamp) when the video chat is supposed to be started by a chat administrator */
@@ -1509,4 +1578,20 @@ export interface PreparedInlineMessage {
   id: string;
   /** Expiration date of the prepared message, in Unix time. Expired prepared messages can no longer be used */
   expiration_date: number;
+}
+
+/** Describes a topic of a direct messages chat. */
+export interface DirectMessagesTopic {
+  /** Unique identifier of the topic */
+  topic_id: number;
+  /** Information about the user that created the topic. Currently, it is always present */
+  user: User;
+}
+
+/** Contains parameters of a post that is being suggested by the bot. */
+export interface SuggestedPostParameters {
+  /** Proposed price for the post. If the field is omitted, then the post is unpaid. */
+  price?: SuggestedPostPrice;
+  /** Proposed send date of the post. If specified, then the date must be between 300 second and 2678400 seconds (30 days) in the future. If the field is omitted, then the post can be published at any time within 30 days at the sole discretion of the user who approves it. */
+  send_date?: number;
 }
