@@ -379,6 +379,8 @@ export interface UniqueGift {
   base_name: string;
   /** Unique name of the gift. This name can be used in https://t.me/nft/... links and story areas */
   name: string;
+  /** Information about the chat that published the gift */
+  publisher_chat?: Chat;
   /** Unique number of the upgraded gift among gifts upgraded from the same regular gift */
   number: number;
   /** Model of the gift */
