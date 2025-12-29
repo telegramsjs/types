@@ -1,17 +1,20 @@
 {
   "name": "@telegram.ts/types",
-  "version": "1.23.1",
+  "version": "1.24.0",
   "description": "Comprehensive Type Declarations for Telegram Bot API with telegramsjs",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
   "keywords": [
     "telegramsjs",
     "telegram",
-    "bot",
+    "telegramapi",
     "api",
-    "types"
+    "bot",
+    "types",
+    "typescript",
+    "sempai-07"
   ],
-  "homepage": "https://docs-telegramsjs.vercel.app/",
+  "homepage": "https://telegramsjs.vercel.app/",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/telegramsjs/types/issues"

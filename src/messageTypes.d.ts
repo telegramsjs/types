@@ -1,6 +1,7 @@
 import type { Chat, User } from "./manageTypes";
 import type { InlineKeyboardMarkup } from "./markupTypes";
 import type { PassportData } from "./passportTypes";
+import type { LanguageCode } from "./languageTypes";
 import type {
   Checklist,
   ChecklistTasksAdded,
@@ -364,16 +365,15 @@ export interface SentWebAppMessage {
 }
 
 /** This object describes a message that was deleted or is otherwise inaccessible to the bot. */
-export interface InaccessibleMessage
-  extends Omit<
-    // TypeScript cannot discriminate union types based on `0` and `number` so
-    // we work around this by including all other properties here. This mostly
-    // negates the benefit of having this interface in the first place, but not
-    // extending Message is not very ergonomic to use. If you have a better idea
-    // how to model this, please let us know!
-    Message,
-    "chat" | "message_id" | "date"
-  > {
+export interface InaccessibleMessage extends Omit<
+  // TypeScript cannot discriminate union types based on `0` and `number` so
+  // we work around this by including all other properties here. This mostly
+  // negates the benefit of having this interface in the first place, but not
+  // extending Message is not very ergonomic to use. If you have a better idea
+  // how to model this, please let us know!
+  Message,
+  "chat" | "message_id" | "date"
+> {
   /** Chat the message belonged to */
   chat: Chat;
   /** Unique message identifier inside the chat */
@@ -530,7 +530,7 @@ export declare namespace MessageEntity {
   export interface PreMessageEntity extends AbstractMessageEntity {
     type: "pre";
     /** For “pre” only, the programming language of the entity text */
-    language?: string;
+    language?: LanguageCode;
   }
   export interface TextLinkMessageEntity extends AbstractMessageEntity {
     type: "text_link";
