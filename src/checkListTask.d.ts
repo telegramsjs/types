@@ -1,4 +1,4 @@
-import type { User } from "./manageTypes";
+import type { Chat, User } from "./manageTypes";
 import type { Message, MessageEntity, ParseMode } from "./messageTypes";
 
 /** Describes a task in a checklist. */
@@ -9,8 +9,10 @@ export interface ChecklistTask {
   text: string;
   /** Special entities that appear in the task text */
   text_entities?: MessageEntity[];
-  /** User that completed the task; omitted if the task wasn't completed */
+  /** User that completed the task; omitted if the task wasn't completed by a user */
   completed_by_user?: User;
+  /** Chat that completed the task; omitted if the task wasn't completed by a chat */
+  completed_by_chat?: Chat;
   /** Point in time (Unix timestamp) when the task was completed; 0 if the task wasn't completed */
   completion_date?: number;
 }
@@ -36,7 +38,7 @@ export interface InputChecklistTask {
   /** Text of the task; 1-100 characters after entities parsing */
   text: string;
   /** Mode for parsing entities in the text. See formatting options for more details. */
-  parse_mode?: ParseMode;
+  parse_mode?: string;
   /** List of special entities that appear in the text, which can be specified instead of parse_mode. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are allowed. */
   text_entities?: MessageEntity[];
 }

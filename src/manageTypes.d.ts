@@ -6,6 +6,7 @@ import type {
   Sticker,
 } from "./messageTypes";
 import type { LanguageCode } from "./languageTypes";
+import type { UniqueGiftColors } from "./invoiceTypes";
 import type { Update } from "./updateTypes";
 
 /** Describes the current status of a webhook. */
@@ -40,6 +41,8 @@ export interface AcceptedGiftTypes {
   unique_gifts: boolean;
   /** True, if a Telegram Premium subscription is accepted */
   premium_subscription: boolean;
+  /** True, if transfers of unique gifts from channels are accepted */
+  gifts_from_channels: boolean;
 }
 
 /** This object represents a Telegram user or bot. */
@@ -55,7 +58,7 @@ export interface User {
   /** User's or bot's username */
   username?: string;
   /** IETF language tag of the user's language */
-  language_code?: LanguageCode;
+  language_code?: string;
   /** True, if this user is a Telegram Premium user */
   is_premium?: true;
   /** True, if this user added the bot to the attachment menu */
@@ -76,6 +79,20 @@ export interface UserFromGetMe extends User {
   can_connect_to_business: boolean;
   /** True, if the bot has main Web App. Returned only in getMe. */
   has_main_web_app: boolean;
+  /** True, if the bot has forum topic mode enabled in private chats. Returned only in getMe. */
+  has_topics_enabled?: boolean;
+}
+
+/** This object describes the rating of a user based on their Telegram Star spendings. */
+export interface UserRating {
+  /** Current level of the user, indicating their reliability when purchasing digital goods and services. A higher level suggests a more trustworthy customer; a negative level is likely reason for concern. */
+  level: number;
+  /** Numerical value of the user's rating; the higher the rating, the better */
+  rating: number;
+  /** The rating value required to get the current level */
+  current_level_rating: number;
+  /** The rating value required to get to the next level; omitted if the maximum level was reached */
+  next_level_rating?: number;
 }
 
 export declare namespace Chat {
@@ -173,14 +190,16 @@ export declare namespace ChatFullInfo {
     type: "private";
     /** Title, for supergroups, channels and group chats */
     title?: undefined;
-    /**  Username, for private chats, supergroups and channels if available */
+    /** Username, for private chats, supergroups and channels if available */
     username?: string;
-    /**  First name of the other party in a private chat */
+    /** First name of the other party in a private chat */
     first_name: string;
-    /**  Last name of the other party in a private chat */
+    /** Last name of the other party in a private chat */
     last_name?: string;
     /** True, if the supergroup chat is a forum (has topics enabled) */
     is_forum?: undefined;
+    /** True, if the chat is the direct messages chat of a channel */
+    is_direct_messages?: undefined;
     /** Identifier of the accent color for the chat name and backgrounds of the chat photo, reply header, and link preview. See accent colors for more details. */
     accent_color_id: number;
     /** The maximum number of reactions that can be set on a message in the chat */
@@ -197,8 +216,14 @@ export declare namespace ChatFullInfo {
     business_location?: BusinessLocation;
     /** For private chats with business accounts, the opening hours of the business */
     business_opening_hours?: BusinessOpeningHours;
+    /** For private chats, the rating of the user if any */
+    rating?: UserRating;
+    /** The color scheme based on a unique gift that must be used for the chat's name, message replies and link previews */
+    unique_gift_colors?: UniqueGiftColors;
     /** For private chats, the personal channel of the user */
     personal_chat?: Chat;
+    /** Information about the corresponding channel chat; for direct messages chats only */
+    parent_chat?: undefined;
     /** List of available reactions allowed in the chat. If omitted, then all emoji reactions are allowed. */
     available_reactions?: ReactionType[];
     /** Custom emoji identifier of the emoji chosen by the chat for the reply header and link preview background */
@@ -207,7 +232,7 @@ export declare namespace ChatFullInfo {
     profile_accent_color_id?: number;
     /** Custom emoji identifier of the emoji chosen by the chat for its profile background */
     profile_background_custom_emoji_id?: string;
-    /**  Custom emoji identifier of the emoji status of the chat or the other party in a private chat */
+    /** Custom emoji identifier of the emoji status of the chat or the other party in a private chat */
     emoji_status_custom_emoji_id?: string;
     /** Expiration date of the emoji status of the chat or the other party in a private chat, in Unix time, if any */
     emoji_status_expiration_date?: number;
@@ -223,7 +248,7 @@ export declare namespace ChatFullInfo {
     join_by_request?: undefined;
     /** Description, for groups, supergroups and channel chats */
     description?: undefined;
-    /**  Primary invite link, for groups, supergroups and channel chats */
+    /** Primary invite link, for groups, supergroups and channel chats */
     invite_link?: undefined;
     /** The most recent pinned message (by sending date) */
     pinned_message?: Message;
@@ -231,11 +256,13 @@ export declare namespace ChatFullInfo {
     permissions?: undefined;
     /** Information about types of gifts that are accepted by the chat or by the corresponding user for private chats */
     accepted_gift_types: AcceptedGiftTypes;
+    /** True, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats. */
+    can_send_paid_media?: undefined;
     /** For supergroups, the minimum allowed delay between consecutive messages sent by each unprivileged user; in seconds */
     slow_mode_delay?: undefined;
-    /**  For supergroups, the minimum number of boosts that a non-administrator user needs to add in order to ignore slow mode and chat permissions */
+    /** For supergroups, the minimum number of boosts that a non-administrator user needs to add in order to ignore slow mode and chat permissions */
     unrestrict_boost_count?: undefined;
-    /**  The time after which all messages sent to the chat will be automatically deleted; in seconds */
+    /** The time after which all messages sent to the chat will be automatically deleted; in seconds */
     message_auto_delete_time?: number;
     /** True, if aggressive anti-spam checks are enabled in the supergroup. The field is only available to chat administrators. */
     has_aggressive_anti_spam_enabled?: undefined;
@@ -253,12 +280,8 @@ export declare namespace ChatFullInfo {
     custom_emoji_sticker_set_name?: undefined;
     /** Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. */
     linked_chat_id?: undefined;
-    /** Information about the corresponding channel chat; for direct messages chats only */
-    parent_chat?: undefined;
     /** For supergroups, the location to which the supergroup is connected */
     location?: undefined;
-    /** True, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats. */
-    can_send_paid_media?: undefined;
   }
   /** Internal type for group chats */
   export interface GroupChat {
@@ -268,14 +291,16 @@ export declare namespace ChatFullInfo {
     type: "group";
     /** Title, for supergroups, channels and group chats */
     title: string;
-    /**  Username, for private chats, supergroups and channels if available */
+    /** Username, for private chats, supergroups and channels if available */
     username?: undefined;
-    /**  First name of the other party in a private chat */
+    /** First name of the other party in a private chat */
     first_name?: undefined;
-    /**  Last name of the other party in a private chat */
+    /** Last name of the other party in a private chat */
     last_name?: undefined;
     /** True, if the supergroup chat is a forum (has topics enabled) */
     is_forum?: undefined;
+    /** True, if the chat is the direct messages chat of a channel */
+    is_direct_messages?: undefined;
     /** Identifier of the accent color for the chat name and backgrounds of the chat photo, reply header, and link preview. See accent colors for more details. */
     accent_color_id: number;
     /** The maximum number of reactions that can be set on a message in the chat */
@@ -292,8 +317,14 @@ export declare namespace ChatFullInfo {
     business_location?: undefined;
     /** For private chats with business accounts, the opening hours of the business */
     business_opening_hours?: undefined;
+    /** For private chats, the rating of the user if any */
+    rating?: undefined;
+    /** The color scheme based on a unique gift that must be used for the chat's name, message replies and link previews */
+    unique_gift_colors?: UniqueGiftColors;
     /** For private chats, the personal channel of the user */
     personal_chat?: undefined;
+    /** Information about the corresponding channel chat; for direct messages chats only */
+    parent_chat?: undefined;
     /** List of available reactions allowed in the chat. If omitted, then all emoji reactions are allowed. */
     available_reactions?: ReactionType[];
     /** Custom emoji identifier of the emoji chosen by the chat for the reply header and link preview background */
@@ -302,7 +333,7 @@ export declare namespace ChatFullInfo {
     profile_accent_color_id?: number;
     /** Custom emoji identifier of the emoji chosen by the chat for its profile background */
     profile_background_custom_emoji_id?: string;
-    /**  Custom emoji identifier of the emoji status of the chat or the other party in a private chat */
+    /** Custom emoji identifier of the emoji status of the chat or the other party in a private chat */
     emoji_status_custom_emoji_id?: string;
     /** Expiration date of the emoji status of the chat or the other party in a private chat, in Unix time, if any */
     emoji_status_expiration_date?: number;
@@ -318,19 +349,21 @@ export declare namespace ChatFullInfo {
     join_by_request?: undefined;
     /** Description, for groups, supergroups and channel chats */
     description?: string;
-    /**  Primary invite link, for groups, supergroups and channel chats */
+    /** Primary invite link, for groups, supergroups and channel chats */
     invite_link?: string;
     /** The most recent pinned message (by sending date) */
     pinned_message?: Message;
     /** Default chat member permissions, for groups and supergroups */
     permissions?: ChatPermissions;
-    /** True, if gifts can be sent to the chat */
-    can_send_gift?: true;
+    /** Information about types of gifts that are accepted by the chat or by the corresponding user for private chats */
+    accepted_gift_types: AcceptedGiftTypes;
+    /** True, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats. */
+    can_send_paid_media?: undefined;
     /** For supergroups, the minimum allowed delay between consecutive messages sent by each unprivileged user; in seconds */
     slow_mode_delay?: undefined;
-    /**  For supergroups, the minimum number of boosts that a non-administrator user needs to add in order to ignore slow mode and chat permissions */
+    /** For supergroups, the minimum number of boosts that a non-administrator user needs to add in order to ignore slow mode and chat permissions */
     unrestrict_boost_count?: undefined;
-    /**  The time after which all messages sent to the chat will be automatically deleted; in seconds */
+    /** The time after which all messages sent to the chat will be automatically deleted; in seconds */
     message_auto_delete_time?: number;
     /** True, if aggressive anti-spam checks are enabled in the supergroup. The field is only available to chat administrators. */
     has_aggressive_anti_spam_enabled?: undefined;
@@ -348,12 +381,8 @@ export declare namespace ChatFullInfo {
     custom_emoji_sticker_set_name?: undefined;
     /** Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. */
     linked_chat_id?: undefined;
-    /** Information about the corresponding channel chat; for direct messages chats only */
-    parent_chat?: undefined;
     /** For supergroups, the location to which the supergroup is connected */
     location?: undefined;
-    /** True, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats. */
-    can_send_paid_media?: undefined;
   }
   /** Internal type for supergroup chats */
   export interface SupergroupChat {
@@ -363,14 +392,16 @@ export declare namespace ChatFullInfo {
     type: "supergroup";
     /** Title, for supergroups, channels and group chats */
     title: string;
-    /**  Username, for private chats, supergroups and channels if available */
+    /** Username, for private chats, supergroups and channels if available */
     username?: string;
-    /**  First name of the other party in a private chat */
+    /** First name of the other party in a private chat */
     first_name?: undefined;
-    /**  Last name of the other party in a private chat */
+    /** Last name of the other party in a private chat */
     last_name?: undefined;
     /** True, if the supergroup chat is a forum (has topics enabled) */
     is_forum?: true;
+    /** True, if the chat is the direct messages chat of a channel */
+    is_direct_messages?: true;
     /** Identifier of the accent color for the chat name and backgrounds of the chat photo, reply header, and link preview. See accent colors for more details. */
     accent_color_id: number;
     /** The maximum number of reactions that can be set on a message in the chat */
@@ -387,8 +418,14 @@ export declare namespace ChatFullInfo {
     business_location?: undefined;
     /** For private chats with business accounts, the opening hours of the business */
     business_opening_hours?: undefined;
+    /** For private chats, the rating of the user if any */
+    rating?: undefined;
+    /** The color scheme based on a unique gift that must be used for the chat's name, message replies and link previews */
+    unique_gift_colors?: UniqueGiftColors;
     /** For private chats, the personal channel of the user */
     personal_chat?: undefined;
+    /** Information about the corresponding channel chat; for direct messages chats only */
+    parent_chat?: Chat.ChannelChat;
     /** List of available reactions allowed in the chat. If omitted, then all emoji reactions are allowed. */
     available_reactions?: ReactionType[];
     /** Custom emoji identifier of the emoji chosen by the chat for the reply header and link preview background */
@@ -397,7 +434,7 @@ export declare namespace ChatFullInfo {
     profile_accent_color_id?: number;
     /** Custom emoji identifier of the emoji chosen by the chat for its profile background */
     profile_background_custom_emoji_id?: string;
-    /**  Custom emoji identifier of the emoji status of the chat or the other party in a private chat */
+    /** Custom emoji identifier of the emoji status of the chat or the other party in a private chat */
     emoji_status_custom_emoji_id?: string;
     /** Expiration date of the emoji status of the chat or the other party in a private chat, in Unix time, if any */
     emoji_status_expiration_date?: number;
@@ -413,19 +450,21 @@ export declare namespace ChatFullInfo {
     join_by_request?: true;
     /** Description, for groups, supergroups and channel chats */
     description?: string;
-    /**  Primary invite link, for groups, supergroups and channel chats */
+    /** Primary invite link, for groups, supergroups and channel chats */
     invite_link?: string;
     /** The most recent pinned message (by sending date) */
     pinned_message?: Message;
     /** Default chat member permissions, for groups and supergroups */
     permissions?: ChatPermissions;
-    /** True, if gifts can be sent to the chat */
-    can_send_gift?: true;
+    /** Information about types of gifts that are accepted by the chat or by the corresponding user for private chats */
+    accepted_gift_types: AcceptedGiftTypes;
+    /** True, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats. */
+    can_send_paid_media?: undefined;
     /** For supergroups, the minimum allowed delay between consecutive messages sent by each unprivileged user; in seconds */
     slow_mode_delay?: number;
-    /**  For supergroups, the minimum number of boosts that a non-administrator user needs to add in order to ignore slow mode and chat permissions */
+    /** For supergroups, the minimum number of boosts that a non-administrator user needs to add in order to ignore slow mode and chat permissions */
     unrestrict_boost_count?: number;
-    /**  The time after which all messages sent to the chat will be automatically deleted; in seconds */
+    /** The time after which all messages sent to the chat will be automatically deleted; in seconds */
     message_auto_delete_time?: number;
     /** True, if aggressive anti-spam checks are enabled in the supergroup. The field is only available to chat administrators. */
     has_aggressive_anti_spam_enabled?: true;
@@ -443,12 +482,8 @@ export declare namespace ChatFullInfo {
     custom_emoji_sticker_set_name?: string;
     /** Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. */
     linked_chat_id?: number;
-    /** Information about the corresponding channel chat; for direct messages chats only */
-    parent_chat?: Chat.ChannelChat;
     /** For supergroups, the location to which the supergroup is connected */
     location?: ChatLocation;
-    /** True, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats. */
-    can_send_paid_media?: undefined;
   }
   /** Internal type for channel chats */
   export interface ChannelChat {
@@ -458,14 +493,16 @@ export declare namespace ChatFullInfo {
     type: "channel";
     /** Title, for supergroups, channels and group chats */
     title: string;
-    /**  Username, for private chats, supergroups and channels if available */
+    /** Username, for private chats, supergroups and channels if available */
     username?: string;
-    /**  First name of the other party in a private chat */
+    /** First name of the other party in a private chat */
     first_name?: undefined;
-    /**  Last name of the other party in a private chat */
+    /** Last name of the other party in a private chat */
     last_name?: undefined;
     /** True, if the supergroup chat is a forum (has topics enabled) */
     is_forum?: undefined;
+    /** True, if the chat is the direct messages chat of a channel */
+    is_direct_messages?: undefined;
     /** Identifier of the accent color for the chat name and backgrounds of the chat photo, reply header, and link preview. See accent colors for more details. */
     accent_color_id: number;
     /** The maximum number of reactions that can be set on a message in the chat */
@@ -482,8 +519,14 @@ export declare namespace ChatFullInfo {
     business_location?: undefined;
     /** For private chats with business accounts, the opening hours of the business */
     business_opening_hours?: undefined;
+    /** For private chats, the rating of the user if any */
+    rating?: undefined;
+    /** The color scheme based on a unique gift that must be used for the chat's name, message replies and link previews */
+    unique_gift_colors?: UniqueGiftColors;
     /** For private chats, the personal channel of the user */
     personal_chat?: undefined;
+    /** Information about the corresponding channel chat; for direct messages chats only */
+    parent_chat?: undefined;
     /** List of available reactions allowed in the chat. If omitted, then all emoji reactions are allowed. */
     available_reactions?: ReactionType[];
     /** Custom emoji identifier of the emoji chosen by the chat for the reply header and link preview background */
@@ -492,7 +535,7 @@ export declare namespace ChatFullInfo {
     profile_accent_color_id?: number;
     /** Custom emoji identifier of the emoji chosen by the chat for its profile background */
     profile_background_custom_emoji_id?: string;
-    /**  Custom emoji identifier of the emoji status of the chat or the other party in a private chat */
+    /** Custom emoji identifier of the emoji status of the chat or the other party in a private chat */
     emoji_status_custom_emoji_id?: string;
     /** Expiration date of the emoji status of the chat or the other party in a private chat, in Unix time, if any */
     emoji_status_expiration_date?: number;
@@ -508,19 +551,21 @@ export declare namespace ChatFullInfo {
     join_by_request?: undefined;
     /** Description, for groups, supergroups and channel chats */
     description?: string;
-    /**  Primary invite link, for groups, supergroups and channel chats */
+    /** Primary invite link, for groups, supergroups and channel chats */
     invite_link?: string;
     /** The most recent pinned message (by sending date) */
     pinned_message?: Message;
     /** Default chat member permissions, for groups and supergroups */
     permissions?: undefined;
-    /** True, if gifts can be sent to the chat */
-    can_send_gift?: true;
+    /** Information about types of gifts that are accepted by the chat or by the corresponding user for private chats */
+    accepted_gift_types: AcceptedGiftTypes;
+    /** True, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats. */
+    can_send_paid_media?: true;
     /** For supergroups, the minimum allowed delay between consecutive messages sent by each unprivileged user; in seconds */
     slow_mode_delay?: undefined;
-    /**  For supergroups, the minimum number of boosts that a non-administrator user needs to add in order to ignore slow mode and chat permissions */
+    /** For supergroups, the minimum number of boosts that a non-administrator user needs to add in order to ignore slow mode and chat permissions */
     unrestrict_boost_count?: undefined;
-    /**  The time after which all messages sent to the chat will be automatically deleted; in seconds */
+    /** The time after which all messages sent to the chat will be automatically deleted; in seconds */
     message_auto_delete_time?: number;
     /** True, if aggressive anti-spam checks are enabled in the supergroup. The field is only available to chat administrators. */
     has_aggressive_anti_spam_enabled?: undefined;
@@ -538,12 +583,8 @@ export declare namespace ChatFullInfo {
     custom_emoji_sticker_set_name?: undefined;
     /** Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. */
     linked_chat_id?: number;
-    /** Information about the corresponding channel chat; for direct messages chats only */
-    parent_chat?: undefined;
     /** For supergroups, the location to which the supergroup is connected */
     location?: undefined;
-    /** True, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats. */
-    can_send_paid_media?: undefined;
   }
 }
 
@@ -903,6 +944,8 @@ export interface ForumTopic {
   message_thread_id: number;
   /** Name of the topic */
   name: string;
+  /** True, if the name of the topic wasn't specified explicitly by its creator and likely needs to be changed by the bot */
+  is_name_implicit?: true;
   /** Color of the topic icon in RGB format */
   icon_color: number;
   /** Unique identifier of the custom emoji shown as the topic icon */

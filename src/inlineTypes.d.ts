@@ -7,6 +7,7 @@ import type {
   ParseMode,
 } from "./messageTypes";
 import type { LabeledPrice } from "./invoiceTypes";
+
 /** This object represents an incoming inline query. When the user sends an empty query, your bot could return some default or trending results. */
 export interface InlineQuery {
   /** Unique identifier for this query */
