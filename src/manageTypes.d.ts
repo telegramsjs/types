@@ -58,7 +58,7 @@ export interface User {
   /** User's or bot's username */
   username?: string;
   /** IETF language tag of the user's language */
-  language_code?: string;
+  language_code?: LanguageCode;
   /** True, if this user is a Telegram Premium user */
   is_premium?: true;
   /** True, if this user added the bot to the attachment menu */
