@@ -74,6 +74,8 @@ export interface UserFromGetMe extends User {
   can_join_groups: boolean;
   /** True, if privacy mode is disabled for the bot. Returned only in getMe. */
   can_read_all_group_messages: boolean;
+  /** True, if other bots can be created to be controlled by the bot. Returned only in getMe. */
+  can_manage_bots: boolean;
   /** True, if the bot supports inline queries. Returned only in getMe. */
   supports_inline_queries: boolean;
   /** True, if the bot can be connected to a Telegram Business account to receive its messages. Returned only in getMe. */
@@ -84,6 +86,20 @@ export interface UserFromGetMe extends User {
   has_topics_enabled: boolean;
   /** True, if the bot allows users to create and delete topics in private chats. Returned only in getMe. */
   allows_users_to_create_topics: boolean;
+}
+
+/** This object contains information about the bot that was created to be managed by the current bot. */
+export interface ManagedBotCreated {
+  /** Information about the bot. The bot's token can be fetched using the method getManagedBotToken. */
+  bot: User;
+}
+
+/** This object contains information about the creation or token update of a bot that is managed by the current bot. */
+export interface ManagedBotUpdated {
+  /** User that created the bot */
+  user: User;
+  /** Information about the bot. Token of the bot can be fetched using the method getManagedBotToken. */
+  bot: User;
 }
 
 /** Describes a service message about the chat owner leaving the chat. */
@@ -749,7 +765,7 @@ export type ChatMember =
 
 /** Represents a chat member that owns the chat and has all administrator privileges. */
 export interface ChatMemberOwner {
-  /** The member's status in the chat, always “creator” */
+  /** The member's status in the chat */
   status: "creator";
   /** Information about the user */
   user: User;
@@ -761,7 +777,7 @@ export interface ChatMemberOwner {
 
 /** Represents a chat member that has some additional privileges. */
 export interface ChatMemberAdministrator {
-  /** The member's status in the chat, always “administrator” */
+  /** The member's status in the chat */
   status: "administrator";
   /** Information about the user */
   user: User;
@@ -807,7 +823,7 @@ export interface ChatMemberAdministrator {
 
 /** Represents a chat member that has no additional privileges or restrictions. */
 export interface ChatMemberMember {
-  /** The member's status in the chat, always “member” */
+  /** The member's status in the chat */
   status: "member";
   /** Information about the user */
   user: User;
@@ -819,7 +835,7 @@ export interface ChatMemberMember {
 
 /** Represents a chat member that is under certain restrictions in the chat. Supergroups only. */
 export interface ChatMemberRestricted {
-  /** The member's status in the chat, always “restricted” */
+  /** The member's status in the chat */
   status: "restricted";
   /** Information about the user */
   user: User;
@@ -863,7 +879,7 @@ export interface ChatMemberRestricted {
 
 /** Represents a chat member that isn't currently a member of the chat, but may join it themselves. */
 export interface ChatMemberLeft {
-  /** The member's status in the chat, always “left” */
+  /** The member's status in the chat */
   status: "left";
   /** Information about the user */
   user: User;
@@ -871,7 +887,7 @@ export interface ChatMemberLeft {
 
 /** Represents a chat member that was banned in the chat and can't return to the chat or view chat messages. */
 export interface ChatMemberBanned {
-  /** The member's status in the chat, always “kicked” */
+  /** The member's status in the chat */
   status: "kicked";
   /** Information about the user */
   user: User;

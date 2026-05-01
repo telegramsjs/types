@@ -8,6 +8,7 @@ import type {
   ChatBoostUpdated,
   BusinessConnection,
   BusinessMessagesDeleted,
+  ManagedBotUpdated,
 } from "./manageTypes";
 import type { CallbackQuery } from "./markupTypes";
 import type {
@@ -156,6 +157,9 @@ export interface Update {
    * The bot must be an administrator in the chat and must explicitly specify "chat_member" in the list of allowed_updates to receive these updates.
    */
   chat_member?: ChatMemberUpdated;
+
+  /** A new bot was created to be managed by the bot or token of a bot was changed */
+  managed_bot?: ManagedBotUpdated;
 
   /**
    * A request to join the chat has been sent.
